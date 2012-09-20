@@ -19,7 +19,6 @@ Module Main
         End If
 
         Console.WriteLine("The following devices are available on this machine:")
-        Console.WriteLine("----------------------------------------------------")
         Console.WriteLine()
 
         ' Enumerate devices and display info
@@ -52,6 +51,7 @@ Module Main
             Console.WriteLine("Packets will be logged to ""{0}"".", PacketLogger.LogDirectoryPath)
         End If
         Console.WriteLine("Ready. Press [Escape] to exit...")
+        Console.WriteLine()
 
         Do
             Dim key = Console.ReadKey
@@ -102,6 +102,10 @@ Module Main
             End If
 
 
+            'TODO: Only further process packets from the iRO servers!
+            '      It's probably enough to restrict IP Addresses to be in 128.241.0.0/16
+            '      Maybe sort logs in three categories: from this network, to this network, from/to other addresses.
+
             Dim payload = tcpPacket.PayloadData
 
             'Incoming global chat
@@ -111,15 +115,6 @@ Module Main
                 Console.WriteLine("Incoming global chat: ""{0}""", System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5))
 
             End If
-
-            'Dim ms As New MemoryStream(payload, False)
-            'Dim reader As New IO.StreamReader(ms)
-            'Console.WriteLine("{0}:{1}:{2},{3} Len={4} {5}:{6} -> {7}:{8}   payloaddata={9}   payloadpacket={10}{11}{12}",
-            '        time.Hour, time.Minute, time.Second, time.Millisecond, length,
-            '        srcIp, srcPort, dstIp, dstPort,
-            '        tcpPacket.PayloadData, tcpPacket.PayloadPacket, Environment.NewLine,
-            '        reader.ReadToEnd())
-
 
         End If
 
