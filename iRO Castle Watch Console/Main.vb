@@ -71,6 +71,29 @@ Module Main
     Private Sub device_OnPacketArrival(sender As Object, e As CaptureEventArgs)
         Dim device = DirectCast(sender, ICaptureDevice)
 
+        Dim time = e.Packet.Timeval.Date
+        Dim length = e.Packet.Data.Length
+
+        Dim packet = PacketDotNet.Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data)
+
+        Dim tcpPacket = PacketDotNet.TcpPacket.GetEncapsulated(packet)
+
+        If tcpPacket IsNot Nothing Then
+
+            Dim ipPacket = DirectCast(tcpPacket.ParentPacket, PacketDotNet.IpPacket)
+
+            Dim srcIp = ipPacket.SourceAddress
+            Dim srcPort = tcpPacket.SourcePort
+
+            Dim dstIp = ipPacket.DestinationAddress
+            Dim dstPort = tcpPacket.DestinationPort
+
+            Console.WriteLine("{0}:{1}:{2},{3} Len={4} {5}:{6} -> {7}:{8}   payloaddata={9}   payloadpacket={10}",
+                    time.Hour, time.Minute, time.Second, time.Millisecond, length,
+                    srcIp, srcPort, dstIp, dstPort,
+                    tcpPacket.PayloadData, tcpPacket.PayloadPacket)
+
+        End If
 
     End Sub
 
