@@ -51,14 +51,14 @@ Public Class Logger
         Do
             LogFilePath = BaseLogFilePath & i.ToString
             i += 1
-        Loop While (File.Exists(LogFilePath & ".dat") Or File.Exists(LogFilePath & ".txt"))
+        Loop While (File.Exists(LogFilePath & ".data") Or File.Exists(LogFilePath & ".txt"))
 
 
         Dim Payload = TcpPacket.PayloadData
 
         Try
             If Payload IsNot Nothing Then
-                Dim LogFilePayload = File.Create(LogFilePath & ".dat")
+                Dim LogFilePayload = File.Create(LogFilePath & ".data")
                 LogFilePayload.Write(Payload, 0, Payload.Length)
                 LogFilePayload.Close()
             End If

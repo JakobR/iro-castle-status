@@ -48,8 +48,8 @@ Module Main
         Next
 
         Console.WriteLine()
-        If LogPath IsNot Nothing Then
-            Console.WriteLine("Packets will be logged to ""{0}"".", LogPath)
+        If PacketLogger IsNot Nothing Then
+            Console.WriteLine("Packets will be logged to ""{0}"".", PacketLogger.LogDirectoryPath)
         End If
         Console.WriteLine("Ready. Press [Escape] to exit...")
 
