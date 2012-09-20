@@ -97,53 +97,17 @@ Module Main
                     srcIp, srcPort, dstIp, dstPort,
                     If(tcpPacket.PayloadData Is Nothing, "none", tcpPacket.PayloadData.Length.ToString), tcpPacket.PayloadPacket)
 
+            If PacketLogger IsNot Nothing Then
+                PacketLogger.LogTcpPacket(tcpPacket, ipPacket, time, length)
+            End If
+
 
             Dim payload = tcpPacket.PayloadData
-
-            If payload IsNot Nothing AndAlso LogPath IsNot Nothing Then
-
-                If Not Directory.Exists(LogPath) Then
-
-                    Try
-                        Directory.CreateDirectory(LogPath)
-                    Catch ex As Exception
-                        Console.WriteLine("Could not create log directory: {0}", ex.Message)
-                    End Try
-
-                End If
-
-                Dim BaseLogFilePath = Path.Combine(LogPath, String.Format("packet-{0}-{1}-{2}--{3}-{4}-{5}--", time.Year, time.Month, time.Day, time.Hour, time.Minute, time.Second))
-                Dim LogFilePath As String
-                Dim i As Integer = 1
-
-                Do
-                    LogFilePath = BaseLogFilePath & i.ToString
-                    i += 1
-                Loop While File.Exists(LogFilePath)
-
-                Try
-                    Dim logfile = File.Create(LogFilePath)
-                    logfile.Write(payload, 0, payload.Length)
-                    logfile.Close()
-
-                    Dim logfile2 = File.Create(LogFilePath & ".txt")
-                    Dim writer = New IO.StreamWriter(logfile2)
-                    writer.WriteLine("Time:          {0}", time)
-                    writer.WriteLine("Source:        {0}:{1}", srcIp, srcPort)
-                    writer.WriteLine("Destination:   {0}:{1}", dstIp, dstPort)
-                    writer.WriteLine("Packet length: {0}", length)
-                    writer.Close()
-                Catch ex As Exception
-                    Console.WriteLine("Could not write log file: {0}", ex.Message)
-                End Try
-
-            End If
 
             'Incoming global chat
             If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso payload(0) = &H8E Then
 
-                'Chat data starts at the fourth byte, and is zero-terminated.
-
+                'Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
                 Console.WriteLine("Incoming global chat: ""{0}""", System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5))
 
             End If
@@ -161,15 +125,17 @@ Module Main
 
     End Sub
 
-    Private ReadOnly Property LogPath As String
+    Private ReadOnly Property PacketLogger As Logger
         Get
 #If DEBUG Then
-            Static _LogPath As String
-            If _LogPath Is Nothing Then
+            Static _Logger As Logger
+            If _Logger Is Nothing Then
                 Dim now = DateTime.Now
-                _LogPath = Path.Combine("D:\iRO Castle Watch\Packet Logs", String.Format("Log-{0}-{1}-{2}--{3}-{4}-{5}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second))
+                Dim LogDirectoryName = String.Format("Log-{0}-{1}-{2}--{3}-{4}-{5}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
+                Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Watch\Packet Logs", LogDirectoryName)
+                _Logger = New Logger(LogDirectoryPath, True)
             End If
-            Return _LogPath
+            Return _Logger
 #Else
             Return Nothing
 #End If
