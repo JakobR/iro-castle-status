@@ -3,13 +3,17 @@ Imports System.Text.RegularExpressions
 
 Public Class WoE
 
-    Private _Realms As New List(Of Realm)
+    Private _Realms As List(Of Realm)
 
     Public ReadOnly Property Realms As IEnumerable(Of Realm)
         Get
             Return _Realms.AsReadOnly
         End Get
     End Property
+
+    Public Sub New(Realms As IEnumerable(Of Realm))
+        _Realms = New List(Of Realm)(Realms)
+    End Sub
 
     Public Sub ProcessBreakMessage(Time As DateTime, Message As String)
 
@@ -47,10 +51,9 @@ Public Class WoE
     Public Shared ReadOnly Property iRO As WoE
         Get
             Static _iRO As WoE
-            If _iRO Is Nothing Then
-                _iRO = New WoE
 
-                _iRO._Realms.AddRange(iRO_CreateRealms)
+            If _iRO Is Nothing Then
+                _iRO = New WoE(iRO_CreateRealms)
             End If
 
             Return _iRO
