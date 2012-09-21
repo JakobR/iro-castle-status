@@ -36,6 +36,10 @@
         Me.Enabled = Enabled
     End Sub
 
+    Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
+        _Breaks.Add(New Break(Time, BreakingGuild))
+    End Sub
+
 
 
     Public Class Break

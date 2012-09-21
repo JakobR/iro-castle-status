@@ -1,5 +1,6 @@
 ﻿
 Imports System.IO
+Imports System.Text.RegularExpressions
 Imports SharpPcap
 
 Module Main
@@ -104,6 +105,7 @@ Module Main
 
             'TODO: Only further process packets from the iRO servers!
             '      It's probably enough to restrict IP Addresses to be in 128.241.0.0/16
+            '      This appears to be Gravity's network: 128.241.92.0/23
             '      Maybe sort logs in three categories: from this network, to this network, from/to other addresses.
 
             Dim payload = tcpPacket.PayloadData
@@ -112,7 +114,40 @@ Module Main
             If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso payload(0) = &H8E Then
 
                 'Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
-                Console.WriteLine("Incoming global chat: ""{0}""", System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5))
+                Dim text = System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5)
+
+                Console.WriteLine("Incoming global chat: ""{0}""", text)
+
+
+                'Check for castle break
+                Dim regex As New Regex("\AThe \[(?<realm>.*)(?<number>\d)\] castle has been conquered by the \[(?<guild>.+)\] guild.\z")
+
+                Dim match = regex.Match(text)
+
+                Dim RealmName = match.Groups("realm").Value.TrimStart()
+                Dim CastleNumber = 0
+                Integer.TryParse(match.Groups("number").Value, CastleNumber)
+                Dim GuildName = match.Groups("guild").Value
+
+                For Each Realm In WoE.iRO.Realms
+
+                    If RealmName.StartsWith(Realm.Name) Then
+
+                        If CastleNumber >= 1 And CastleNumber <= Realm.Castles.Count Then
+
+                            Dim Castle = Realm.GetCastleWithNumber(CastleNumber)
+
+                            Castle.AddBreak(time, GuildName)
+
+                            Console.WriteLine("[{0} {1}] broken by [{2}]!", Realm.Name, Castle.Number, Castle.OwningGuild)
+
+                        End If
+
+                    End If
+
+                Next
+
+
 
             End If
 
