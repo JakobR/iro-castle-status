@@ -190,7 +190,7 @@ Module Main
 
         Dim b = IP.GetAddressBytes
 
-        Return b(0) = 128 AndAlso b(1) = 241 AndAlso (b(3) = 92 OrElse b(3) = 93)
+        Return b(0) = 128 AndAlso b(1) = 241 AndAlso (b(2) = 92 OrElse b(2) = 93)
 
     End Function
 
