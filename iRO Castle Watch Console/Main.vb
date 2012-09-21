@@ -1,6 +1,5 @@
 ﻿
 Imports System.IO
-Imports System.Text.RegularExpressions
 Imports SharpPcap
 
 Module Main
@@ -125,34 +124,7 @@ Module Main
 
                     Console.WriteLine("Incoming global chat: ""{0}""", text)
 
-
-                    'Check for castle break
-                    Dim regex As New Regex("\AThe \[(?<realm>.*)(?<number>\d)\] castle has been conquered by the \[(?<guild>.+)\] guild.\z")
-
-                    Dim match = regex.Match(text)
-
-                    Dim RealmName = match.Groups("realm").Value.TrimStart()
-                    Dim CastleNumber = 0
-                    Integer.TryParse(match.Groups("number").Value, CastleNumber)
-                    Dim GuildName = match.Groups("guild").Value
-
-                    For Each Realm In WoE.iRO.Realms
-
-                        If RealmName.StartsWith(Realm.Name) Then
-
-                            If CastleNumber >= 1 And CastleNumber <= Realm.Castles.Count Then
-
-                                Dim Castle = Realm.GetCastleWithNumber(CastleNumber)
-
-                                Castle.AddBreak(time, GuildName)
-
-                                Console.WriteLine("[{0} {1}] broken by [{2}]!", Realm.Name, Castle.Number, Castle.OwningGuild)
-
-                            End If
-
-                        End If
-
-                    Next
+                    WoE.iRO.ProcessBreakMessage(time, text)
 
                 End If 'Incoming global chat
 
