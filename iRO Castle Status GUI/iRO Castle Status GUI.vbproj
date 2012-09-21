@@ -130,5 +130,11 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iRO Castle Status\iRO Castle Status.vbproj">
+      <Project>{1400d5f0-669a-4d81-8155-e4e3d3054c69}</Project>
+      <Name>iRO Castle Status</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
