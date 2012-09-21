@@ -10,6 +10,8 @@ Module Main
         Console.WriteLine("using SharpPcap {0}", SharpPcap.Version.VersionString)
         Console.WriteLine()
 
+        AddHandler WoE.iRO.BreakOccurred, AddressOf iRO_BreakOccurred
+
         ' Retrieve device list
         Dim devices = CaptureDeviceList.Instance
 
@@ -133,6 +135,11 @@ Module Main
         End If
 
     End Sub
+
+    Private Sub iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
+        Console.WriteLine("[{0}:{1}] -- {5}{3} {4} -- {2}", e.Time.Hour, e.Time.Minute, e.NewOwningGuild, e.Realm.Name, e.Castle.Number, New String(" "c, If(e.Realm.Name.Length <= 10, 10 - e.Realm.Name.Length, 0)))
+    End Sub
+
 
     Private ReadOnly Property PacketLogger As Logger
         Get
