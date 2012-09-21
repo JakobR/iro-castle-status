@@ -1,6 +1,8 @@
 ﻿
 Public Class Realm
 
+    Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
+
     ' Castle with number i+1 must be stored at index i
     Private _Castles As List(Of Castle)
 
@@ -31,8 +33,12 @@ Public Class Realm
     Public Property Name As String
 
     Public Sub New(Name As String, Castles As IEnumerable(Of Castle))
-        _Castles = New List(Of Castle)(Castles)
         Me.Name = Name
+        _Castles = New List(Of Castle)(Castles)
+
+        For Each c In Castles
+            AddHandler c.BreakOccurred, AddressOf Castle_BreakOccurred
+        Next
     End Sub
 
     Public ReadOnly Property HasAtLeastOneBreak As Boolean
@@ -47,4 +53,7 @@ Public Class Realm
         End Get
     End Property
 
+    Private Sub Castle_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
+        RaiseEvent BreakOccurred(Me, New Castle.BreakEventArgs() With {.Realm = Me, .Castle = e.Castle, .NewOwningGuild = e.NewOwningGuild, .Time = e.Time})
+    End Sub
 End Class

@@ -1,5 +1,7 @@
 ﻿Public Class Castle
 
+    Event BreakOccurred As EventHandler(Of BreakEventArgs)
+
     Private _Number As Integer
 
     Public Property Number As Integer
@@ -38,6 +40,7 @@
 
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
         _Breaks.Add(New Break(Time, BreakingGuild))
+        RaiseEvent BreakOccurred(Me, New BreakEventArgs With {.Castle = Me, .Time = Time, .NewOwningGuild = BreakingGuild})
     End Sub
 
 
@@ -72,6 +75,16 @@
                 Return x.Time.CompareTo(y.Time)
             End Function
         End Class
+
+    End Class
+
+    Public Class BreakEventArgs
+        Inherits EventArgs
+
+        Public Property Castle As Castle
+        Public Property Realm As Realm
+        Public Property NewOwningGuild As String
+        Public Property Time As DateTime
 
     End Class
 

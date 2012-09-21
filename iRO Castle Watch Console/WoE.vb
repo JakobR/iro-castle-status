@@ -3,6 +3,8 @@ Imports System.Text.RegularExpressions
 
 Public Class WoE
 
+    Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
+
     Private _Realms As List(Of Realm)
 
     Public ReadOnly Property Realms As IEnumerable(Of Realm)
@@ -13,6 +15,10 @@ Public Class WoE
 
     Public Sub New(Realms As IEnumerable(Of Realm))
         _Realms = New List(Of Realm)(Realms)
+
+        For Each r In Realms
+            AddHandler r.BreakOccurred, AddressOf Realm_BreakOccurred
+        Next
     End Sub
 
     Public Sub ProcessBreakMessage(Time As DateTime, Message As String)
@@ -45,6 +51,10 @@ Public Class WoE
 
         End If
 
+    End Sub
+
+    Private Sub Realm_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
+        RaiseEvent BreakOccurred(Me, New Castle.BreakEventArgs() With {.Realm = e.Realm, .Castle = e.Castle, .NewOwningGuild = e.NewOwningGuild, .Time = e.Time})
     End Sub
 
 
