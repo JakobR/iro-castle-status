@@ -72,6 +72,12 @@ Module Main
             device.Close()
         Next
 
+        'WoE.iRO.ProcessBreakMessage(Now, "The [BalderGuild5] castle has been conquered by the [Valkyrie] guild.")
+        'WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie Realms 5] castle has been conquered by the [Warrior Nation] guild.")
+        'WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie] guild conquered the [Valfreyja 3] of Horn.")
+        'WoE.iRO.ProcessBreakMessage(Now, "The [Warrior Nation] guild conquered the [Valfreyja 5] stronghold of Banadis.")
+        'Console.ReadKey()
+
     End Sub
 
     Private Sub device_OnPacketArrival(sender As Object, e As CaptureEventArgs)
@@ -137,7 +143,31 @@ Module Main
     End Sub
 
     Private Sub iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
-        Console.WriteLine("[{0}:{1}] -- {5}{3} {4} -- {2}", e.Time.Hour, e.Time.Minute, e.NewOwningGuild, e.Realm.Name, e.Castle.Number, New String(" "c, If(e.Realm.Name.Length <= 10, 10 - e.Realm.Name.Length, 0)))
+        'Console.WriteLine("[{0}:{1}] -- {5}{3} {4} -- {2}", e.Time.Hour, e.Time.Minute, e.NewOwningGuild, e.Realm.Name, e.Castle.Number, New String(" "c, If(e.Realm.Name.Length <= 10, 10 - e.Realm.Name.Length, 0)))
+
+        Console.WriteLine()
+        Console.WriteLine()
+        Console.WriteLine()
+        Console.WriteLine()
+        Console.WriteLine()
+        Console.WriteLine("Castle status as of {0:00}:{1:00}:", e.Time.Hour, e.Time.Minute)
+        Console.WriteLine()
+
+        For Each r In WoE.iRO.Realms
+
+            If r.HasAtLeastOneBreak Then
+
+                For Each c In r.Castles
+
+                    Console.WriteLine("{1,10} {2} -- {0}", c.OwningGuild, r.Name, c.Number)
+
+                Next
+
+                Console.WriteLine()
+
+            End If
+
+        Next
     End Sub
 
 
