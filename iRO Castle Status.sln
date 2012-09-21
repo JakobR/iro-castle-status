@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2012
-Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "iRO Castle Watch Console", "iRO Castle Watch Console\iRO Castle Watch Console.vbproj", "{2EC74688-5957-429E-B857-6C100F519814}"
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "iRO Castle Status (Console)", "iRO Castle Status (Console)\iRO Castle Status (Console).vbproj", "{2EC74688-5957-429E-B857-6C100F519814}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

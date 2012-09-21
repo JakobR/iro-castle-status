@@ -6,7 +6,7 @@ Module Main
 
     Public Sub Main()
 
-        Console.WriteLine("iRO Castle Watch {0}", Version.VersionString)
+        Console.WriteLine("iRO Castle Status {0}", Version.VersionString)
         Console.WriteLine("using SharpPcap {0}", SharpPcap.Version.VersionString)
         Console.WriteLine()
 
@@ -178,7 +178,7 @@ Module Main
             If _Logger Is Nothing Then
                 Dim now = DateTime.Now
                 Dim LogDirectoryName = String.Format("Log-{0}-{1}-{2}--{3}-{4}-{5}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
-                Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Watch\Packet Logs", LogDirectoryName)
+                Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Status\Packet Logs", LogDirectoryName)
                 _Logger = New Logger(LogDirectoryPath, True)
             End If
             Return _Logger

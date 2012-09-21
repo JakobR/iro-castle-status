@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2EC74688-5957-429E-B857-6C100F519814}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>iRO_Castle_Watch.Main</StartupObject>
-    <RootNamespace>iRO_Castle_Watch</RootNamespace>
-    <AssemblyName>iRO Castle Watch Console</AssemblyName>
+    <StartupObject>iRO_Castle_Status.Main</StartupObject>
+    <RootNamespace>iRO_Castle_Status</RootNamespace>
+    <AssemblyName>iRO Castle Status %28Console%29</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -35,7 +35,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>iRO Castle Watch Console.xml</DocumentationFile>
+    <DocumentationFile>iRO Castle Status %28Console%29.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -45,7 +45,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>iRO Castle Watch Console.xml</DocumentationFile>
+    <DocumentationFile>iRO Castle Status %28Console%29.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -150,6 +150,7 @@
       <Install>false</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
