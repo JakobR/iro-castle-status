@@ -25,12 +25,18 @@ Public Class Logger
     End Sub
 
 
-    Public Sub LogTcpPacket(TcpPacket As PacketDotNet.TcpPacket, IpPacket As PacketDotNet.IpPacket, Time As Date, Optional FullPacketLength As Integer = Integer.MinValue)
+    Public Sub LogTcpPacket(TcpPacket As PacketDotNet.TcpPacket, IpPacket As PacketDotNet.IpPacket, Time As Date, Optional FullPacketLength As Integer = Integer.MinValue, Optional LogCategory As String = Nothing)
 
-        If Not Directory.Exists(LogDirectoryPath) Then
+        Dim DirectoryPath = LogDirectoryPath
+
+        If LogCategory IsNot Nothing Then
+            DirectoryPath = Path.Combine(DirectoryPath, LogCategory)
+        End If
+
+        If Not Directory.Exists(DirectoryPath) Then
 
             Try
-                Directory.CreateDirectory(LogDirectoryPath)
+                Directory.CreateDirectory(DirectoryPath)
             Catch ex As Exception
                 If Not FailSilently Then
                     Throw New Exception("Could create log directory.", ex)
@@ -41,9 +47,8 @@ Public Class Logger
 
         End If
 
-
         Dim BaseFilename = String.Format("packet-{0}-{1}-{2}--{3}-{4}-{5}--", Time.Year, Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second)
-        Dim BaseLogFilePath = Path.Combine(LogDirectoryPath, BaseFilename)
+        Dim BaseLogFilePath = Path.Combine(DirectoryPath, BaseFilename)
         Dim LogFilePath As String
         Dim i As Integer = 1
 

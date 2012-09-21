@@ -99,57 +99,64 @@ Module Main
                     If(tcpPacket.PayloadData Is Nothing, "none", tcpPacket.PayloadData.Length.ToString), tcpPacket.PayloadPacket)
 
             If PacketLogger IsNot Nothing Then
-                PacketLogger.LogTcpPacket(tcpPacket, ipPacket, time, length)
+                Dim category As String
+                If srcIp.BelongsToGravity Then
+                    category = "From Gravity"
+                ElseIf dstIp.BelongsToGravity Then
+                    category = "To Gravity"
+                Else
+                    category = "Other"
+                End If
+
+                PacketLogger.LogTcpPacket(tcpPacket, ipPacket, time, length, category)
             End If
 
 
-            'TODO: Only further process packets from the iRO servers!
-            '      It's probably enough to restrict IP Addresses to be in 128.241.0.0/16
-            '      This appears to be Gravity's network: 128.241.92.0/23
-            '      Maybe sort logs in three categories: from this network, to this network, from/to other addresses.
+            'Only process packets from the iRO servers
+            If srcIp.BelongsToGravity Then
 
-            Dim payload = tcpPacket.PayloadData
+                Dim payload = tcpPacket.PayloadData
 
-            'Incoming global chat
-            If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso payload(0) = &H8E Then
+                'Incoming global chat
+                If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso payload(0) = &H8E Then
 
-                'Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
-                Dim text = System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5)
+                    'Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
+                    Dim text = System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5)
 
-                Console.WriteLine("Incoming global chat: ""{0}""", text)
+                    Console.WriteLine("Incoming global chat: ""{0}""", text)
 
 
-                'Check for castle break
-                Dim regex As New Regex("\AThe \[(?<realm>.*)(?<number>\d)\] castle has been conquered by the \[(?<guild>.+)\] guild.\z")
+                    'Check for castle break
+                    Dim regex As New Regex("\AThe \[(?<realm>.*)(?<number>\d)\] castle has been conquered by the \[(?<guild>.+)\] guild.\z")
 
-                Dim match = regex.Match(text)
+                    Dim match = regex.Match(text)
 
-                Dim RealmName = match.Groups("realm").Value.TrimStart()
-                Dim CastleNumber = 0
-                Integer.TryParse(match.Groups("number").Value, CastleNumber)
-                Dim GuildName = match.Groups("guild").Value
+                    Dim RealmName = match.Groups("realm").Value.TrimStart()
+                    Dim CastleNumber = 0
+                    Integer.TryParse(match.Groups("number").Value, CastleNumber)
+                    Dim GuildName = match.Groups("guild").Value
 
-                For Each Realm In WoE.iRO.Realms
+                    For Each Realm In WoE.iRO.Realms
 
-                    If RealmName.StartsWith(Realm.Name) Then
+                        If RealmName.StartsWith(Realm.Name) Then
 
-                        If CastleNumber >= 1 And CastleNumber <= Realm.Castles.Count Then
+                            If CastleNumber >= 1 And CastleNumber <= Realm.Castles.Count Then
 
-                            Dim Castle = Realm.GetCastleWithNumber(CastleNumber)
+                                Dim Castle = Realm.GetCastleWithNumber(CastleNumber)
 
-                            Castle.AddBreak(time, GuildName)
+                                Castle.AddBreak(time, GuildName)
 
-                            Console.WriteLine("[{0} {1}] broken by [{2}]!", Realm.Name, Castle.Number, Castle.OwningGuild)
+                                Console.WriteLine("[{0} {1}] broken by [{2}]!", Realm.Name, Castle.Number, Castle.OwningGuild)
+
+                            End If
 
                         End If
 
-                    End If
+                    Next
 
-                Next
+                End If 'Incoming global chat
 
-
-
-            End If
+            End If 'srcIp.BelongsToGravity
 
         End If
 
@@ -171,5 +178,20 @@ Module Main
 #End If
         End Get
     End Property
+
+    ''' <summary>
+    ''' Checks if the IP address is in Gravity's Network, which seems to be 128.241.92.0/23.
+    ''' </summary>
+    ''' <param name="IP">The IP address to check.</param>
+    <System.Runtime.CompilerServices.Extension()>
+    Private Function BelongsToGravity(IP As Net.IPAddress) As Boolean
+
+        Debug.Assert(IP IsNot Nothing)
+
+        Dim b = IP.GetAddressBytes
+
+        Return b(0) = 128 AndAlso b(1) = 241 AndAlso (b(3) = 92 OrElse b(3) = 93)
+
+    End Function
 
 End Module
