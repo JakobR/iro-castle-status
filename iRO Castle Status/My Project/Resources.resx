@@ -117,4 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="WoE1Regex" xml:space="preserve">
+    <value>\AThe \[(?&lt;realm&gt;.+)(?&lt;number&gt;\d)\] castle has been conquered by the \[(?&lt;guild&gt;.+)\] guild.\z</value>
+    <comment>Matches WoE 1-style castle break messages.</comment>
+  </data>
+  <data name="WoE2Regex" xml:space="preserve">
+    <value>\AThe \[(?&lt;guild&gt;.+)\] guild conquered the \[(?&lt;realm&gt;.+)(?&lt;number&gt;\d)\] (stronghold )?of (?&lt;castle&gt;\w+)\.\z</value>
+    <comment>Matches WoE 2-style castle break messages.</comment>
+  </data>
 </root>
