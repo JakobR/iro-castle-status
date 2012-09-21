@@ -29,11 +29,8 @@ Public Class WoE
 
     Public Sub ProcessBreakMessage(Time As DateTime, Message As String)
 
-        Dim woe1regex = "\AThe \[(?<realm>.+)(?<number>\d)\] castle has been conquered by the \[(?<guild>.+)\] guild.\z"
-        Dim woe2regex = "\AThe \[(?<guild>.+)\] guild conquered the \[(?<realm>.+)(?<number>\d)\] (stronghold )?of (?<castle>\w+)\.\z"
-
         'Use combined regex
-        Dim regex = New Regex(String.Format("({0}|{1})", woe1regex, woe2regex))
+        Dim regex = New Regex(String.Format("({0}|{1})", My.Resources.WoE1Regex, My.Resources.WoE2Regex))
 
         Dim match = regex.Match(Message)
 
