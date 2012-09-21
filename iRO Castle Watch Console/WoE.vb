@@ -3,7 +3,7 @@ Imports System.Text.RegularExpressions
 
 Public Class WoE
 
-    Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
+    Public Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
 
     Private _Realms As List(Of Realm)
 
@@ -13,13 +13,19 @@ Public Class WoE
         End Get
     End Property
 
-    Public Sub New(Realms As IEnumerable(Of Realm))
+    Private Sub New(Realms As IEnumerable(Of Realm))
         _Realms = New List(Of Realm)(Realms)
-
-        For Each r In Realms
-            AddHandler r.BreakOccurred, AddressOf Realm_BreakOccurred
-        Next
     End Sub
+
+    Public Shared Function Create(Realms As IEnumerable(Of Realm)) As WoE
+        Dim w = New WoE(Realms)
+
+        For Each r In w.Realms
+            AddHandler r.BreakOccurred, AddressOf w.Realm_BreakOccurred
+        Next
+
+        Return w
+    End Function
 
     Public Sub ProcessBreakMessage(Time As DateTime, Message As String)
 
@@ -31,25 +37,26 @@ Public Class WoE
 
         Dim match = regex.Match(Message)
 
-        If match.Success Then
-
-            Dim info = New With {
-                                    .RealmName = match.Groups("realm").Value.TrimStart(),
-                                    .CastleNumber = Integer.Parse(match.Groups("number").Value),
-                                    .GuildName = match.Groups("guild").Value
-                                }
-
-            For Each Realm In Realms
-                If info.RealmName.StartsWith(Realm.Name) AndAlso
-                   info.CastleNumber >= 1 AndAlso
-                   info.CastleNumber <= Realm.Castles.Count Then
-
-                    Realm.GetCastleWithNumber(info.CastleNumber).AddBreak(Time, info.GuildName)
-
-                End If
-            Next
-
+        If Not match.Success Then
+            Exit Sub
         End If
+
+        Dim info = New With {
+                                .RealmName = match.Groups("realm").Value.TrimStart(),
+                                .CastleNumber = Integer.Parse(match.Groups("number").Value),
+                                .GuildName = match.Groups("guild").Value
+                            }
+
+        For Each Realm In Realms
+            If info.RealmName.StartsWith(Realm.Name) AndAlso
+               info.CastleNumber >= 1 AndAlso
+               info.CastleNumber <= Realm.Castles.Count Then
+
+                Realm.GetCastleWithNumber(info.CastleNumber).AddBreak(Time, info.GuildName)
+                Exit Sub
+
+            End If
+        Next
 
     End Sub
 
@@ -63,7 +70,8 @@ Public Class WoE
             Static _iRO As WoE
 
             If _iRO Is Nothing Then
-                _iRO = New WoE(iRO_CreateRealms)
+                Debug.Print("Create iRO WoE info.")
+                _iRO = WoE.Create(iRO_CreateRealms)
             End If
 
             Return _iRO
@@ -74,59 +82,59 @@ Public Class WoE
 
         ' TODO: Read this stuff from an xml file or so...
 
-        Yield New Realm("Balder",
-                        Iterator Function() As IEnumerable(Of Castle)
-                            Yield New Castle(1)
-                            Yield New Castle(2, Enabled:=False)
-                            Yield New Castle(3)
-                            Yield New Castle(4)
-                            Yield New Castle(5)
-                        End Function())
+        Yield Realm.Create("Balder",
+                            Iterator Function() As IEnumerable(Of Castle)
+                                Yield New Castle(1)
+                                Yield New Castle(2, Enabled:=False)
+                                Yield New Castle(3)
+                                Yield New Castle(4)
+                                Yield New Castle(5)
+                            End Function())
 
-        Yield New Realm("Britoniah",
-                        Iterator Function() As IEnumerable(Of Castle)
-                            Yield New Castle(1, Enabled:=False)
-                            Yield New Castle(2)
-                            Yield New Castle(3)
-                            Yield New Castle(4)
-                            Yield New Castle(5)
-                        End Function())
+        Yield Realm.Create("Britoniah",
+                          Iterator Function() As IEnumerable(Of Castle)
+                              Yield New Castle(1, Enabled:=False)
+                              Yield New Castle(2)
+                              Yield New Castle(3)
+                              Yield New Castle(4)
+                              Yield New Castle(5)
+                          End Function())
 
-        Yield New Realm("Luina",
-                        Iterator Function() As IEnumerable(Of Castle)
-                            Yield New Castle(1)
-                            Yield New Castle(2)
-                            Yield New Castle(3)
-                            Yield New Castle(4, Enabled:=False)
-                            Yield New Castle(5)
-                        End Function())
+        Yield Realm.Create("Luina",
+                         Iterator Function() As IEnumerable(Of Castle)
+                             Yield New Castle(1)
+                             Yield New Castle(2)
+                             Yield New Castle(3)
+                             Yield New Castle(4, Enabled:=False)
+                             Yield New Castle(5)
+                         End Function())
 
-        Yield New Realm("Valkyrie",
-                        Iterator Function() As IEnumerable(Of Castle)
-                            Yield New Castle(1, Enabled:=False)
-                            Yield New Castle(2)
-                            Yield New Castle(3)
-                            Yield New Castle(4)
-                            Yield New Castle(5)
-                        End Function())
+        Yield Realm.Create("Valkyrie",
+                            Iterator Function() As IEnumerable(Of Castle)
+                                Yield New Castle(1, Enabled:=False)
+                                Yield New Castle(2)
+                                Yield New Castle(3)
+                                Yield New Castle(4)
+                                Yield New Castle(5)
+                            End Function())
 
-        Yield New Realm("Nithafjoll",
-                        Iterator Function() As IEnumerable(Of Castle)
-                            Yield New Castle(1)
-                            Yield New Castle(2)
-                            Yield New Castle(3)
-                            Yield New Castle(4)
-                            Yield New Castle(5)
-                        End Function())
+        Yield Realm.Create("Nithafjoll",
+                            Iterator Function() As IEnumerable(Of Castle)
+                                Yield New Castle(1)
+                                Yield New Castle(2)
+                                Yield New Castle(3)
+                                Yield New Castle(4)
+                                Yield New Castle(5)
+                            End Function())
 
-        Yield New Realm("Valfreyja",
-                        Iterator Function() As IEnumerable(Of Castle)
-                            Yield New Castle(1)
-                            Yield New Castle(2)
-                            Yield New Castle(3)
-                            Yield New Castle(4)
-                            Yield New Castle(5)
-                        End Function())
+        Yield Realm.Create("Valfreyja",
+                           Iterator Function() As IEnumerable(Of Castle)
+                               Yield New Castle(1)
+                               Yield New Castle(2)
+                               Yield New Castle(3)
+                               Yield New Castle(4)
+                               Yield New Castle(5)
+                           End Function())
 
     End Function
 

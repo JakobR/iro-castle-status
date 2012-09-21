@@ -1,6 +1,6 @@
 ﻿Public Class Castle
 
-    Event BreakOccurred As EventHandler(Of BreakEventArgs)
+    Public Event BreakOccurred As EventHandler(Of BreakEventArgs)
 
     Private _Number As Integer
 
