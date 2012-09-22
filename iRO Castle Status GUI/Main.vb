@@ -131,8 +131,11 @@ Module Main
 
                 Dim payload = tcpPacket.PayloadData
 
-                'Incoming global chat
-                If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso payload(0) = &H8E Then
+                '&H8E = Incoming global chat
+                '&H9A = Incoming server shout ('Ultimate yells blah blah')
+                'not sure if the second byte belongs to this packet code as well... it's been always 0 for these types of packets.
+                'the 3rd byte seems to be the packet length (probably 3rd and 4th together though).
+                If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso (payload(0) = &H8E OrElse payload(0) = &H9A) Then
 
                     'Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
                     Dim text = System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5)
