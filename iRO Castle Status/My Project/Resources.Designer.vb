@@ -119,23 +119,5 @@ Namespace My.Resources
                 Return CType(obj,System.Drawing.Bitmap)
             End Get
         End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to \AThe \[(?&lt;realm&gt;.+)(?&lt;number&gt;\d)\] castle has been conquered by the \[(?&lt;guild&gt;.+)\] guild.\z.
-        '''</summary>
-        Friend ReadOnly Property WoE1Regex() As String
-            Get
-                Return ResourceManager.GetString("WoE1Regex", resourceCulture)
-            End Get
-        End Property
-        
-        '''<summary>
-        '''  Looks up a localized string similar to \AThe \[(?&lt;guild&gt;.+)\] guild conquered the \[(?&lt;realm&gt;.+)(?&lt;number&gt;\d)\] (stronghold )?of (?&lt;castle&gt;\w+)\.\z.
-        '''</summary>
-        Friend ReadOnly Property WoE2Regex() As String
-            Get
-                Return ResourceManager.GetString("WoE2Regex", resourceCulture)
-            End Get
-        End Property
     End Module
 End Namespace
