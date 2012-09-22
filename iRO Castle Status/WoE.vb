@@ -1,7 +1,11 @@
 ﻿
 Imports System.Text.RegularExpressions
+Imports System.ComponentModel
 
 Public Class WoE
+    Implements INotifyPropertyChanged
+
+    Public Event PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
 
     Public Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
 
@@ -57,8 +61,15 @@ Public Class WoE
 
     End Sub
 
+    Public ReadOnly Property AllCastleBreaks() As IEnumerable(Of Castle.Break)
+        Get
+            Return Realms.SelectMany(Function(r) r.Castles.SelectMany(Function(c) c.Breaks)).OrderBy(Function(b) b.Time)
+        End Get
+    End Property
+
     Private Sub Realm_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
         RaiseEvent BreakOccurred(Me, New Castle.BreakEventArgs() With {.Realm = e.Realm, .Castle = e.Castle, .NewOwningGuild = e.NewOwningGuild, .Time = e.Time})
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("AllCastleBreaks"))
     End Sub
 
 
@@ -79,7 +90,7 @@ Public Class WoE
         ' TODO: Read this stuff from an xml file or so...
 
         Yield Realm.Create("Balder",
-                            Iterator Function() As IEnumerable(Of Castle)
+                            Iterator Function()
                                 Yield New Castle(1)
                                 Yield New Castle(2, Enabled:=False)
                                 Yield New Castle(3)
@@ -88,7 +99,7 @@ Public Class WoE
                             End Function())
 
         Yield Realm.Create("Britoniah",
-                          Iterator Function() As IEnumerable(Of Castle)
+                          Iterator Function()
                               Yield New Castle(1, Enabled:=False)
                               Yield New Castle(2)
                               Yield New Castle(3)
@@ -97,7 +108,7 @@ Public Class WoE
                           End Function())
 
         Yield Realm.Create("Luina",
-                         Iterator Function() As IEnumerable(Of Castle)
+                         Iterator Function()
                              Yield New Castle(1)
                              Yield New Castle(2)
                              Yield New Castle(3)
@@ -106,7 +117,7 @@ Public Class WoE
                          End Function())
 
         Yield Realm.Create("Valkyrie",
-                            Iterator Function() As IEnumerable(Of Castle)
+                            Iterator Function()
                                 Yield New Castle(1, Enabled:=False)
                                 Yield New Castle(2)
                                 Yield New Castle(3)
@@ -115,7 +126,7 @@ Public Class WoE
                             End Function())
 
         Yield Realm.Create("Nithafjoll",
-                            Iterator Function() As IEnumerable(Of Castle)
+                            Iterator Function()
                                 Yield New Castle(1)
                                 Yield New Castle(2)
                                 Yield New Castle(3)
@@ -124,7 +135,7 @@ Public Class WoE
                             End Function())
 
         Yield Realm.Create("Valfreyja",
-                           Iterator Function() As IEnumerable(Of Castle)
+                           Iterator Function()
                                Yield New Castle(1)
                                Yield New Castle(2)
                                Yield New Castle(3)
