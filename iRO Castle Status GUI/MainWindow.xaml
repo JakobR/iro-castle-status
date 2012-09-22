@@ -1,25 +1,51 @@
 ﻿<Window x:Class="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:iRO="clr-namespace:iROCastleStatus;assembly=iROCastleStatus"
-        Title="iRO Castle Status" Width="900" Height="600">
+        xmlns:lib="clr-namespace:iROCastleStatus;assembly=iROCastleStatus"
+        xmlns:local="clr-namespace:iROCastleStatus.GUIApplication"
+        Title="iRO Castle Status" Width="800" Height="650">
     <Window.Resources>
-        <DataTemplate DataType="{x:Type iRO:Realm}">
-            <Grid>
-                
-            </Grid>
+        <HierarchicalDataTemplate DataType="{x:Type lib:Realm}" ItemsSource="{Binding Castles}">
+            <TextBlock Text="{Binding Name}" />
+        </HierarchicalDataTemplate>
+        
+        <DataTemplate DataType="{x:Type lib:Castle}">
+            <TextBlock FontSize="24">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}{0} {1}: {2}">
+                        <Binding Path="DataContext.Name" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type local:StretchingTreeViewItem}}" />
+                        <Binding Path="Number" />
+                        <Binding Path="OwningGuild" FallbackValue="n/a" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
         </DataTemplate>
+        
+        <Style TargetType="{x:Type local:StretchingTreeViewItem}">
+            <Setter Property="IsExpanded" Value="True" />
+            <Setter Property="Visibility" Value="Collapsed" />
+            <Style.Triggers>
+                <DataTrigger Binding="{Binding DataContext.Enabled, RelativeSource={RelativeSource Self}}" Value="True">
+                    <Setter Property="Visibility" Value="Visible" />
+                </DataTrigger>
+            </Style.Triggers>
+        </Style>
+        
+        <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
     </Window.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
-            <ColumnDefinition />
-            <ColumnDefinition />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="395" />
         </Grid.ColumnDefinitions>
-        <Grid.RowDefinitions>
-            <RowDefinition />
-            <RowDefinition />
-        </Grid.RowDefinitions>
+        
+        <local:StretchingTreeView Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
+        
+        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" ShowsPreview="False" />
+        
+        <!-- Log of all breaks, with times, should be shown in column 2 -->
+        <!-- Maybe highlight the breaks in the log, if a certain castle/realm is selected -->
         
     </Grid>
 </Window>
