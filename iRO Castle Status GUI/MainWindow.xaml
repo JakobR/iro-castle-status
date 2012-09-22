@@ -13,9 +13,23 @@
             <TextBlock FontSize="24">
                 <TextBlock.Text>
                     <MultiBinding StringFormat="{}{0} {1}: {2}">
-                        <Binding Path="DataContext.Name" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type local:StretchingTreeViewItem}}" />
+                        <Binding Path="Realm.Name" />
                         <Binding Path="Number" />
                         <Binding Path="OwningGuild" TargetNullValue="" />
+                    </MultiBinding>
+                </TextBlock.Text>
+            </TextBlock>
+        </DataTemplate>
+        
+        <DataTemplate DataType="{x:Type lib:Castle+Break}">
+            <TextBlock FontFamily="Courier New" FontSize="16">
+                <TextBlock.Text>
+                    <MultiBinding StringFormat="{}[{0:00}:{1:00}] {2,10} {3} -- {4}">
+                        <Binding Path="Time.Hour" />
+                        <Binding Path="Time.Minute" />
+                        <Binding Path="Castle.Realm.Name" />
+                        <Binding Path="Castle.Number" />
+                        <Binding Path="BreakingGuild" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
@@ -30,19 +44,26 @@
         
         <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
     </Window.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition />
-            <ColumnDefinition Width="Auto" />
-            <ColumnDefinition Width="395" />
-        </Grid.ColumnDefinitions>
-        
-        <local:StretchingTreeView Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
-        
-        <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" ShowsPreview="False" />
-        
-        <!-- Log of all breaks, with times, should be shown in column 2 -->
-        <!-- Maybe highlight the breaks in the log, if a certain castle/realm is selected -->
-        
-    </Grid>
+    <DockPanel LastChildFill="True">
+        <Grid DockPanel.Dock="Bottom" Margin="5" Visibility="Collapsed">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <Button x:Name="ShowWoE1" Width="50">WoE 1</Button>
+                <Button x:Name="ShowWoE2" Width="50">WoE 2</Button>
+            </StackPanel>
+        </Grid>
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="395" />
+            </Grid.ColumnDefinitions>
+
+            <local:StretchingTreeView Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
+
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" ShowsPreview="False" />
+
+            <ListView Grid.Column="2" ItemsSource="{Binding AllCastleBreaks,Source={StaticResource iRO}}" />
+
+        </Grid>
+    </DockPanel>
 </Window>
