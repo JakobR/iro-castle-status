@@ -20,15 +20,12 @@
                 </TextBlock.Text>
             </TextBlock>
         </DataTemplate>
+
+        <local:CastleAndRealmVisibilityConverter x:Key="CastleAndRealmVisibilityConverter" />
         
         <Style TargetType="{x:Type local:StretchingTreeViewItem}">
             <Setter Property="IsExpanded" Value="True" />
-            <Setter Property="Visibility" Value="Collapsed" />
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding DataContext.Enabled, RelativeSource={RelativeSource Self}}" Value="True">
-                    <Setter Property="Visibility" Value="Visible" />
-                </DataTrigger>
-            </Style.Triggers>
+            <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
         </Style>
         
         <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />

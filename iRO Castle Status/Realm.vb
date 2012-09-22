@@ -35,12 +35,6 @@ Public Class Realm
         Return c
     End Function
 
-    Public ReadOnly Property Enabled As Boolean
-        Get
-            Return True
-        End Get
-    End Property
-
     Private _Name As String
 
     Public Property Name As String
