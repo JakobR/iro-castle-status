@@ -117,6 +117,25 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="alde_gld" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\alde_gld.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="aru_gld" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\aru_gld.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="gef_fild13" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gef_fild13.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="pay_gld" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pay_gld.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="prt_gld" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\prt_gld.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="sch_gld" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\sch_gld.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="WoE1Regex" xml:space="preserve">
     <value>\AThe \[(?&lt;realm&gt;.+)(?&lt;number&gt;\d)\] castle has been conquered by the \[(?&lt;guild&gt;.+)\] guild.\z</value>
     <comment>Matches WoE 1-style castle break messages.</comment>

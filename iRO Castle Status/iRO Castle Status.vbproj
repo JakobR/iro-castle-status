@@ -45,6 +45,7 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -99,6 +100,24 @@
       <CustomToolNamespace>My</CustomToolNamespace>
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pay_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sch_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aru_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\gef_fild13.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\prt_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\alde_gld.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

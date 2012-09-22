@@ -61,6 +61,66 @@ Namespace My.Resources
         End Property
         
         '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property alde_gld() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("alde_gld", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property aru_gld() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("aru_gld", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property gef_fild13() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("gef_fild13", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property pay_gld() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("pay_gld", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property prt_gld() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("prt_gld", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
+        '''  Looks up a localized resource of type System.Drawing.Bitmap.
+        '''</summary>
+        Friend ReadOnly Property sch_gld() As System.Drawing.Bitmap
+            Get
+                Dim obj As Object = ResourceManager.GetObject("sch_gld", resourceCulture)
+                Return CType(obj,System.Drawing.Bitmap)
+            End Get
+        End Property
+        
+        '''<summary>
         '''  Looks up a localized string similar to \AThe \[(?&lt;realm&gt;.+)(?&lt;number&gt;\d)\] castle has been conquered by the \[(?&lt;guild&gt;.+)\] guild.\z.
         '''</summary>
         Friend ReadOnly Property WoE1Regex() As String
