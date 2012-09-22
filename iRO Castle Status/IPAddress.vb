@@ -16,5 +16,4 @@ Public Module IPAddress
 
     End Function
 
-
 End Module

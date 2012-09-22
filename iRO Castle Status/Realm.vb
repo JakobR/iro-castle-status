@@ -1,5 +1,10 @@
 ﻿
+Imports System.ComponentModel
+
 Public Class Realm
+    Implements INotifyPropertyChanged
+
+    Public Event PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
 
     Public Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
 
@@ -36,7 +41,17 @@ Public Class Realm
         End Get
     End Property
 
+    Private _Name As String
+
     Public Property Name As String
+        Get
+            Return _Name
+        End Get
+        Set(value As String)
+            _Name = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Name"))
+        End Set
+    End Property
 
     Private Sub New(Name As String, Castles As IEnumerable(Of Castle))
         Me.Name = Name
@@ -67,5 +82,7 @@ Public Class Realm
 
     Private Sub Castle_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
         RaiseEvent BreakOccurred(Me, New Castle.BreakEventArgs() With {.Realm = Me, .Castle = e.Castle, .NewOwningGuild = e.NewOwningGuild, .Time = e.Time})
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("HasAtLeastOneBreak"))
     End Sub
+
 End Class

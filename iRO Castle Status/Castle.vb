@@ -1,5 +1,10 @@
 ﻿
+Imports System.ComponentModel
+
 Public Class Castle
+    Implements INotifyPropertyChanged
+
+    Public Event PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
 
     Public Event BreakOccurred As EventHandler(Of BreakEventArgs)
 
@@ -11,10 +16,21 @@ Public Class Castle
         End Get
         Private Set(value As Integer)
             _Number = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Number"))
         End Set
     End Property
 
+    Private _Enabled As Boolean
+
     Public Property Enabled As Boolean
+        Get
+            Return _Enabled
+        End Get
+        Set(value As Boolean)
+            _Enabled = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Enabled"))
+        End Set
+    End Property
 
     Private _Breaks As New SortedSet(Of Break)(New Break.Comparer)
 
@@ -42,6 +58,8 @@ Public Class Castle
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
         _Breaks.Add(New Break(Time, BreakingGuild))
         RaiseEvent BreakOccurred(Me, New BreakEventArgs With {.Castle = Me, .Time = Time, .NewOwningGuild = BreakingGuild})
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Breaks"))
+        RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("OwningGuild"))
     End Sub
 
 
