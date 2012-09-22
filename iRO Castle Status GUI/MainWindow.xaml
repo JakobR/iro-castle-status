@@ -15,7 +15,7 @@
                     <MultiBinding StringFormat="{}{0} {1}: {2}">
                         <Binding Path="DataContext.Name" RelativeSource="{RelativeSource FindAncestor, AncestorLevel=2, AncestorType={x:Type local:StretchingTreeViewItem}}" />
                         <Binding Path="Number" />
-                        <Binding Path="OwningGuild" FallbackValue="n/a" />
+                        <Binding Path="OwningGuild" TargetNullValue="" />
                     </MultiBinding>
                 </TextBlock.Text>
             </TextBlock>
