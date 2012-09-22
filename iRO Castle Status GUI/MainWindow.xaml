@@ -47,6 +47,7 @@
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Bottom" Margin="5" Visibility="Collapsed">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                <!-- Maybe use check boxes for this. Maybe even a separate check box for every realm? -->
                 <Button x:Name="ShowWoE1" Width="50">WoE 1</Button>
                 <Button x:Name="ShowWoE2" Width="50">WoE 2</Button>
             </StackPanel>
