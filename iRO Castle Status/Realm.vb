@@ -30,6 +30,12 @@ Public Class Realm
         Return c
     End Function
 
+    Public ReadOnly Property Enabled As Boolean
+        Get
+            Return True
+        End Get
+    End Property
+
     Public Property Name As String
 
     Private Sub New(Name As String, Castles As IEnumerable(Of Castle))

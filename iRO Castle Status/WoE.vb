@@ -67,7 +67,6 @@ Public Class WoE
             Static _iRO As WoE
 
             If _iRO Is Nothing Then
-                Debug.Print("Create iRO WoE info.")
                 _iRO = WoE.Create(iRO_CreateRealms)
             End If
 
