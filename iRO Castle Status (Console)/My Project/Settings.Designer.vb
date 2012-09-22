@@ -64,9 +64,9 @@ Namespace My
     Friend Module MySettingsProperty
 
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")> _
-        Friend ReadOnly Property Settings() As Global.iRO_Castle_Status.My.MySettings
+        Friend ReadOnly Property Settings() As Global.iROCastleStatus.ConsoleApplication.My.MySettings
             Get
-                Return Global.iRO_Castle_Status.My.MySettings.Default
+                Return Global.iROCastleStatus.ConsoleApplication.My.MySettings.Default
             End Get
         End Property
     End Module

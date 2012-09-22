@@ -6,9 +6,9 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{2EC74688-5957-429E-B857-6C100F519814}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <StartupObject>iRO_Castle_Status.Main</StartupObject>
-    <RootNamespace>iRO_Castle_Status</RootNamespace>
-    <AssemblyName>iRO Castle Status %28Console%29</AssemblyName>
+    <StartupObject>iROCastleStatus.ConsoleApplication.Main</StartupObject>
+    <RootNamespace>iROCastleStatus.ConsoleApplication</RootNamespace>
+    <AssemblyName>iROCastl StatusConsole</AssemblyName>
     <FileAlignment>512</FileAlignment>
     <MyType>Console</MyType>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
@@ -35,7 +35,7 @@
     <DefineDebug>true</DefineDebug>
     <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>iRO Castle Status %28Console%29.xml</DocumentationFile>
+    <DocumentationFile>iROCastl StatusConsole.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -45,7 +45,7 @@
     <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>iRO Castle Status %28Console%29.xml</DocumentationFile>
+    <DocumentationFile>iROCastl StatusConsole.xml</DocumentationFile>
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -146,6 +146,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\iRO Castle Status\iRO Castle Status.vbproj">

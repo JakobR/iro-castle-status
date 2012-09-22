@@ -1,4 +1,5 @@
-﻿Public Class Castle
+﻿
+Public Class Castle
 
     Public Event BreakOccurred As EventHandler(Of BreakEventArgs)
 
