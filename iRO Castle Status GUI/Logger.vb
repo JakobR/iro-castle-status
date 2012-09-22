@@ -47,7 +47,7 @@ Public Class Logger
 
         End If
 
-        Dim BaseFilename = String.Format("packet-{0}-{1}-{2}--{3}-{4}-{5}--", Time.Year, Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second)
+        Dim BaseFilename = String.Format("packet-{0:0000}-{1:00}-{2:00}--{3:00}-{4:00}-{5:00}--", Time.Year, Time.Month, Time.Day, Time.Hour, Time.Minute, Time.Second)
         Dim BaseLogFilePath = Path.Combine(DirectoryPath, BaseFilename)
         Dim LogFilePath As String
         Dim i As Integer = 1
