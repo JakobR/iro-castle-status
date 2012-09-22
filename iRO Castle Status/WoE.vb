@@ -5,6 +5,11 @@ Imports System.ComponentModel
 Public Class WoE
     Implements INotifyPropertyChanged
 
+    Public Enum Type
+        WoE1 = 1
+        WoE2 = 2
+    End Enum
+
     Public Event PropertyChanged(sender As Object, e As PropertyChangedEventArgs) Implements INotifyPropertyChanged.PropertyChanged
 
     Public Event BreakOccurred As EventHandler(Of Castle.BreakEventArgs)
@@ -89,7 +94,7 @@ Public Class WoE
 
         ' TODO: Read this stuff from an xml file or so...
 
-        Yield Realm.Create("Balder",
+        Yield Realm.Create("Balder", Type.WoE1,
                             Iterator Function()
                                 Yield New Castle(1)
                                 Yield New Castle(2, Enabled:=False)
@@ -98,7 +103,7 @@ Public Class WoE
                                 Yield New Castle(5)
                             End Function())
 
-        Yield Realm.Create("Britoniah",
+        Yield Realm.Create("Britoniah", Type.WoE1,
                           Iterator Function()
                               Yield New Castle(1, Enabled:=False)
                               Yield New Castle(2)
@@ -107,7 +112,7 @@ Public Class WoE
                               Yield New Castle(5)
                           End Function())
 
-        Yield Realm.Create("Luina",
+        Yield Realm.Create("Luina", Type.WoE1,
                          Iterator Function()
                              Yield New Castle(1)
                              Yield New Castle(2)
@@ -116,7 +121,7 @@ Public Class WoE
                              Yield New Castle(5)
                          End Function())
 
-        Yield Realm.Create("Valkyrie",
+        Yield Realm.Create("Valkyrie", Type.WoE1,
                             Iterator Function()
                                 Yield New Castle(1, Enabled:=False)
                                 Yield New Castle(2)
@@ -125,7 +130,7 @@ Public Class WoE
                                 Yield New Castle(5)
                             End Function())
 
-        Yield Realm.Create("Nithafjoll",
+        Yield Realm.Create("Nithafjoll", Type.WoE2,
                             Iterator Function()
                                 Yield New Castle(1)
                                 Yield New Castle(2)
@@ -134,7 +139,7 @@ Public Class WoE
                                 Yield New Castle(5)
                             End Function())
 
-        Yield Realm.Create("Valfreyja",
+        Yield Realm.Create("Valfreyja", Type.WoE2,
                            Iterator Function()
                                Yield New Castle(1)
                                Yield New Castle(2)

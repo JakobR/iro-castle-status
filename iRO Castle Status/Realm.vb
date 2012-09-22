@@ -51,13 +51,26 @@ Public Class Realm
         End Set
     End Property
 
+    Private _Type As WoE.Type
+
+    Public Property Type As WoE.Type
+        Get
+            Return _Type
+        End Get
+        Set(value As WoE.Type)
+            _Type = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Type"))
+        End Set
+    End Property
+
     Private Sub New()
     End Sub
 
-    Public Shared Function Create(Name As String, Castles As IEnumerable(Of Castle)) As Realm
+    Public Shared Function Create(Name As String, Type As WoE.Type, Castles As IEnumerable(Of Castle)) As Realm
         Dim r = New Realm
 
         r.Name = Name
+        r.Type = Type
 
         ' Only iterate over the 'Castles' parameter once.
         ' For every iteration, the iterator function will be called (in case of WoE.iRO's method of creating the realms), which means that new Castle objects are created.
