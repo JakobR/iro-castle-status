@@ -56,14 +56,24 @@ Public Class Castle
         End Get
     End Property
 
-    Public ReadOnly Property OwningGuild As String
+    Private _OwningGuild As String
+
+    Public Property OwningGuild As String
         Get
+            If _OwningGuild IsNot Nothing Then
+                Return _OwningGuild
+            End If
+
             If Breaks.Count = 0 Then
                 Return Nothing
             End If
 
             Return Breaks.Last.BreakingGuild
         End Get
+        Set(value As String)
+            _OwningGuild = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("OwningGuild"))
+        End Set
     End Property
 
     Public Sub New(Number As Integer, Optional Enabled As Boolean = True)
@@ -72,6 +82,7 @@ Public Class Castle
     End Sub
 
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
+        _OwningGuild = Nothing
         _Breaks.Add(New Break(Me, Time, BreakingGuild))
         RaiseEvent BreakOccurred(Me, New BreakEventArgs With {.Castle = Me, .Time = Time, .NewOwningGuild = BreakingGuild})
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Breaks"))
