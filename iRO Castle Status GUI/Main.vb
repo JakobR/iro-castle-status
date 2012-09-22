@@ -161,11 +161,16 @@ Module Main
             Exit Sub
         End If
 
+        ' Packets starting with either &H87 or &7F with a length of 6 bytes seem to be something else...
+        If payload.Length = 6 AndAlso (payload(0) = &H87 Or payload(0) = &H7F) Then
+            Exit Sub
+        End If
+
         ' Calculate length of the data for this part of the packet (I really hope this format fits all the packets, otherwise something may break...)
         Dim datalength = payload(2) + payload(3) * &HFF
 
         If datalength > length Then
-            Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength > length!")
+            Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength > length! More info: time={0}, payload.length={1}, offset={2}, length={3}", time, payload.Length, offset, length)
             Exit Sub
         End If
 
