@@ -1,4 +1,6 @@
 ﻿
+' Originally taken from http://stackoverflow.com/a/718505 and rewritten to VB.
+
 Imports System.IO
 Imports System.Runtime.InteropServices
 
@@ -88,4 +90,5 @@ Public NotInheritable Class ConsoleManager
         Console.SetOut(TextWriter.Null)
         Console.SetError(TextWriter.Null)
     End Sub
+
 End Class
