@@ -10,15 +10,29 @@
         </HierarchicalDataTemplate>
         
         <DataTemplate DataType="{x:Type lib:Castle}">
-            <TextBlock FontSize="24">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}{0} {1}: {2}">
-                        <Binding Path="Realm.Name" />
-                        <Binding Path="Number" />
-                        <Binding Path="OwningGuild" TargetNullValue="" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
+            <StackPanel Orientation="Horizontal">
+                <TextBlock FontSize="24" x:Name="boo">
+                    <TextBlock.Text>
+                        <MultiBinding StringFormat="{}{0} {1}: ">
+                            <Binding Path="Realm.Name" />
+                            <Binding Path="Number" />
+                        </MultiBinding>
+                    </TextBlock.Text>
+                </TextBlock>
+                <TextBox Text="{Binding OwningGuild}" MinWidth="120" BorderThickness="0" FontSize="24" Background="Transparent" Foreground="{Binding Foreground,ElementName=boo}">
+                    <!-- This style works as well, but it's a lot more complicated... -->
+                    <!--<TextBox.Style>
+                         <Style>
+                         <Setter Property="TextBox.Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}" />
+                         <Style.Triggers>
+                         <DataTrigger Binding="{Binding IsSelected, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type local:StretchingTreeViewItem}}}" Value="True">
+                         <Setter Property="TextBox.Foreground" Value="{DynamicResource {x:Static SystemColors.HighlightTextBrushKey}}" />
+                         </DataTrigger>
+                         </Style.Triggers>
+                         </Style>
+                         </TextBox.Style>-->
+                </TextBox>
+            </StackPanel>
         </DataTemplate>
         
         <DataTemplate DataType="{x:Type lib:Castle+Break}">
