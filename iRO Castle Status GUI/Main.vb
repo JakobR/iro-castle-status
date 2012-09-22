@@ -8,7 +8,6 @@ Module Main
     Public Sub Main()
 
         'TODO: Option to show console in release version (command line option)
-        '      Maybe add a button to the main window as well.
 
 #If DEBUG Then
         ConsoleManager.Show()
