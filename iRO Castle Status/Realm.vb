@@ -17,6 +17,10 @@ Public Class Realm
             For i = 0 To _Castles.Count - 1
                 Debug.Assert(_Castles(i).Number = i + 1)
             Next
+
+            For Each c In _Castles
+                Debug.Assert(c.Realm Is Me)
+            Next
 #End If
 
             Return _Castles.AsReadOnly
@@ -49,7 +53,11 @@ Public Class Realm
 
     Private Sub New(Name As String, Castles As IEnumerable(Of Castle))
         Me.Name = Name
+
         _Castles = New List(Of Castle)(Castles)
+        For Each c In _Castles ' Note: If you do this on the "Castles" parameter, it won't have any effect. That's because the castles will be re-created if you iterate over the iterator function again.
+            c.Realm = Me
+        Next
     End Sub
 
     Public Shared Function Create(Name As String, Castles As IEnumerable(Of Castle)) As Realm

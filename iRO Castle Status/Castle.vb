@@ -32,10 +32,26 @@ Public Class Castle
         End Set
     End Property
 
+    Private _Realm As Realm
+
+    Public Property Realm As Realm
+        Get
+            Return _Realm
+        End Get
+        Friend Set(value As Realm)
+            _Realm = value
+        End Set
+    End Property
+
     Private _Breaks As New SortedSet(Of Break)(New Break.Comparer)
 
     Public ReadOnly Property Breaks As IEnumerable(Of Break)
         Get
+#If DEBUG Then
+            For Each b In _Breaks
+                Debug.Assert(b.Castle Is Me)
+            Next
+#End If
             Return _Breaks
         End Get
     End Property
@@ -56,7 +72,7 @@ Public Class Castle
     End Sub
 
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
-        _Breaks.Add(New Break(Time, BreakingGuild))
+        _Breaks.Add(New Break(Me, Time, BreakingGuild))
         RaiseEvent BreakOccurred(Me, New BreakEventArgs With {.Castle = Me, .Time = Time, .NewOwningGuild = BreakingGuild})
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Breaks"))
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("OwningGuild"))
@@ -65,6 +81,14 @@ Public Class Castle
 
 
     Public Class Break
+
+        Private _Castle As Castle
+
+        Public ReadOnly Property Castle As Castle
+            Get
+                Return _Castle
+            End Get
+        End Property
 
         Private _Time As DateTime
 
@@ -82,7 +106,8 @@ Public Class Castle
             End Get
         End Property
 
-        Public Sub New(Time As DateTime, BreakingGuild As String)
+        Public Sub New(Castle As Castle, Time As DateTime, BreakingGuild As String)
+            _Castle = Castle
             _Time = Time
             _BreakingGuild = BreakingGuild
         End Sub
