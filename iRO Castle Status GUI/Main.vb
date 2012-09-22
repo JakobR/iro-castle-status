@@ -105,7 +105,7 @@ Module Main
             Dim dstIp = ipPacket.DestinationAddress
             Dim dstPort = tcpPacket.DestinationPort
 
-            Console.WriteLine("{0}:{1}:{2},{3} Len={4} {5}:{6} -> {7}:{8}  payloaddata={9} bytes   payloadpacket={10}",
+            Console.WriteLine("{0:00}:{1:00}:{2:00},{3:000} Len={4} {5}:{6} -> {7}:{8}  payloaddata={9} bytes   payloadpacket={10}",
                     time.Hour, time.Minute, time.Second, time.Millisecond, length,
                     srcIp, srcPort, dstIp, dstPort,
                     If(tcpPacket.PayloadData Is Nothing, "none", tcpPacket.PayloadData.Length.ToString), tcpPacket.PayloadPacket)
@@ -182,7 +182,7 @@ Module Main
             Static _Logger As Logger
             If _Logger Is Nothing Then
                 Dim now = DateTime.Now
-                Dim LogDirectoryName = String.Format("Log-{0}-{1}-{2}--{3}-{4}-{5}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
+                Dim LogDirectoryName = String.Format("Log-{0:0000}-{1:00}-{2:00}--{3:00}-{4:00}-{5:00}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
                 Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Status\Packet Logs", LogDirectoryName)
                 _Logger = New Logger(LogDirectoryPath, True)
             End If
