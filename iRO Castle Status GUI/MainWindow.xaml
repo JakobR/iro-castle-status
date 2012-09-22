@@ -1,9 +1,9 @@
-﻿<Window x:Class="MainWindow"
+﻿<Window x:Class="MainWindow" x:Name="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:lib="clr-namespace:iROCastleStatus;assembly=iROCastleStatus"
         xmlns:local="clr-namespace:iROCastleStatus.GUIApplication"
-        Title="iRO Castle Status" Width="800" Height="650">
+        Title="iRO Castle Status" Width="800" Height="675">
     <Window.Resources>
         <HierarchicalDataTemplate DataType="{x:Type lib:Realm}" ItemsSource="{Binding Castles}">
             <TextBlock Text="{Binding Name}" />
@@ -42,16 +42,20 @@
         <Style TargetType="{x:Type local:StretchingTreeViewItem}">
             <Setter Property="IsExpanded" Value="True" />
             <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
+            <Setter Property="Focusable" Value="False" />
         </Style>
         
         <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Bottom" Margin="5" Visibility="Collapsed">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+        <Grid DockPanel.Dock="Bottom" Margin="5">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Visibility="Collapsed">
                 <!-- Maybe use check boxes for this. Maybe even a separate check box for every realm? -->
                 <Button x:Name="ShowWoE1" Width="50">WoE 1</Button>
                 <Button x:Name="ShowWoE2" Width="50">WoE 2</Button>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}">Stay on top</CheckBox>
             </StackPanel>
         </Grid>
         <Grid>
@@ -61,7 +65,7 @@
                 <ColumnDefinition Width="395" />
             </Grid.ColumnDefinitions>
 
-            <local:StretchingTreeView Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
+            <local:StretchingTreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" ShowsPreview="False" />
 
