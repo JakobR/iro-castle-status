@@ -51,19 +51,25 @@ Public Class Realm
         End Set
     End Property
 
-    Private Sub New(Name As String, Castles As IEnumerable(Of Castle))
-        Me.Name = Name
-
-        _Castles = New List(Of Castle)(Castles)
-        For Each c In _Castles ' Note: If you do this on the "Castles" parameter, it won't have any effect. That's because the castles will be re-created if you iterate over the iterator function again.
-            c.Realm = Me
-        Next
+    Private Sub New()
     End Sub
 
     Public Shared Function Create(Name As String, Castles As IEnumerable(Of Castle)) As Realm
-        Dim r = New Realm(Name, Castles)
+        Dim r = New Realm
 
-        For Each c In r.Castles
+        r.Name = Name
+
+        ' Only iterate over the 'Castles' parameter once.
+        ' For every iteration, the iterator function will be called (in case of WoE.iRO's method of creating the realms), which means that new Castle objects are created.
+        r._Castles = New List(Of Castle)(Castles)
+
+        For Each c In r._Castles
+            c.Realm = r
+        Next
+
+        ' Can't add event handlers in constructor (they won't work)
+        ' That's why Realm.Create has to be used instead of New Realm.
+        For Each c In r._Castles
             AddHandler c.BreakOccurred, AddressOf r.Castle_BreakOccurred
         Next
 
