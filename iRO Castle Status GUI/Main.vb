@@ -131,24 +131,61 @@ Module Main
 
                 Dim payload = tcpPacket.PayloadData
 
-                '&H8E = Incoming global chat
-                '&H9A = Incoming server shout ('Ultimate yells blah blah')
-                'not sure if the second byte belongs to this packet code as well... it's been always 0 for these types of packets.
-                'the 3rd byte seems to be the packet length (probably 3rd and 4th together though).
-                If payload IsNot Nothing AndAlso payload.Length >= 5 AndAlso (payload(0) = &H8E OrElse payload(0) = &H9A) Then
-
-                    'Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
-                    Dim text = System.Text.Encoding.ASCII.GetString(payload, 4, payload.Length - 5)
-
-                    Console.WriteLine("Incoming global chat: ""{0}""", text)
-
-                    WoE.iRO.ProcessBreakMessage(time, text)
-
-                End If 'Incoming global chat
+                If payload IsNot Nothing Then
+                    ProcessPacketPayload(time, payload, 0, payload.Length)
+                End If
 
             End If 'srcIp.BelongsToGravity
 
         End If
+
+    End Sub
+
+    Private Sub ProcessPacketPayload(time As Date, payload As Byte(), offset As Integer, length As Integer)
+
+        Debug.Assert(payload IsNot Nothing)
+        Debug.Assert(offset >= 0)
+        Debug.Assert(offset + length <= payload.Length)
+
+        '&H8E = Incoming publc chat; Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
+        '&H9A = Incoming server message (WoE messages, 'Ultimate yells blah blah', probably GM shouts too)
+        'not sure if the second byte belongs to this packet code as well... it's been always 0 for these types of packets.
+        'the 3rd byte seems to be the packet length (probably 3rd and 4th together though).
+        'there can be more packets 'glued' together.
+        'woe messages are like server yells, but start with 'ssss', which is not diplayed...!?
+
+        ' Too short? Can't be much interesting data inside...
+        If length < 5 Then
+            Exit Sub
+        End If
+
+        ' Calculate length of the data for this part of the packet (I really hope this format fits all the packets, otherwise something may break...)
+        Dim datalength = payload(2) + payload(3) * &HFF
+
+        If datalength > length Then
+            Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength > length!")
+            Exit Sub
+        End If
+
+        ' First two bytes determine the packet type.
+        If payload(0) = &H9A AndAlso payload(1) = &H0 Then ' It's a server message!
+
+            ' Get text, starts at 4th byte and is zero-terminated.
+            Dim text = System.Text.Encoding.ASCII.GetString(payload, offset + 4, datalength - 5)
+
+            Console.WriteLine("Incoming server message: ""{0}""", text)
+
+            ' If it starts with "ssss", it's a WoE message!
+            If text.StartsWith("ssss") Then
+                WoE.iRO.ProcessBreakMessage(time, text.Substring(4))
+            End If
+
+        ElseIf payload(0) = &H8E AndAlso payload(1) = &H0 Then ' It's a public chat message!
+            ' Process other packet types...
+        End If
+
+        'Process next sub-packet
+        ProcessPacketPayload(time, payload, offset + datalength, length - datalength)
 
     End Sub
 
