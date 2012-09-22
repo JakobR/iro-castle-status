@@ -8,6 +8,7 @@ Module Main
     Public Sub Main()
 
         'TODO: Option to show console in release version (command line option)
+        'TODO: Option to not show the WPF window (in that case, wait for the user to press the Escape button)
 
 #If DEBUG Then
         ConsoleManager.Show()
