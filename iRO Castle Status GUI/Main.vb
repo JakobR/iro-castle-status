@@ -5,22 +5,49 @@ Imports iROCastleStatus
 
 Module Main
 
-    Public Sub Main()
+    Public Sub Main(Args() As String)
 
-        'TODO: Option to show console in release version (command line option)
-        'TODO: Option to not show the WPF window (in that case, wait for the user to press the Escape button)
+        ' Parse command line options
+        ' Available options:
+        '   --console: Show the console (always active in #DEBUG mode)
+        '   --nogui:   Don't show the WPF Window. Implies --console.
+
+        Dim OptionShowConsole As Boolean = False
+        Dim OptionNoGUI As Boolean = False
+
+        For Each arg In Args
+            If "--console".Equals(arg) Then
+                OptionShowConsole = True
+            ElseIf "--nogui".Equals(arg) Then
+                OptionNoGUI = True
+            Else
+                MessageBox.Show("Invalid command line option. Valid options are ""--console"" and ""--nogui"". More information about this is not available.", "iRO Castle Status")
+                Exit Sub
+            End If
+        Next
+
+        If OptionNoGUI Then
+            OptionShowConsole = True
+        End If
 
 #If DEBUG Then
-        ConsoleManager.Show()
-
-        Console.WindowWidth = 200
-        Console.WindowHeight = 30
-        Console.BufferWidth = 200
-        Console.BufferHeight = 1000
+        OptionShowConsole = True
 #End If
+
+        If OptionShowConsole Then
+            ConsoleManager.Show()
+
+            Console.WindowWidth = 200
+            Console.WindowHeight = 30
+            Console.BufferWidth = 200
+            Console.BufferHeight = 1000
+        End If
 
         Console.WriteLine("iRO Castle Status")
         Console.WriteLine("using SharpPcap {0}", SharpPcap.Version.VersionString)
+        If Args.Length > 0 Then
+            Console.WriteLine("Command line arguments: " & String.Join(" ", Args))
+        End If
         Console.WriteLine()
 
         AddHandler WoE.iRO.BreakOccurred, AddressOf iRO_BreakOccurred
@@ -65,11 +92,23 @@ Module Main
         If PacketLogger IsNot Nothing Then
             Console.WriteLine("Packets will be logged to ""{0}"".", PacketLogger.LogDirectoryPath)
         End If
-        Console.WriteLine("Ready.")
-        Console.WriteLine()
 
-        Dim w = New MainWindow
-        w.ShowDialog()
+        If OptionNoGUI Then
+            Debug.Assert(OptionShowConsole)
+            Debug.Assert(ConsoleManager.HasConsole)
+
+            Console.WriteLine("Ready. Press [Escape] to exit...")
+            Console.WriteLine()
+
+            Do Until (Console.ReadKey.Key = ConsoleKey.Escape)
+            Loop
+        Else
+            Console.WriteLine("Ready.")
+            Console.WriteLine()
+
+            Dim w = New MainWindow
+            w.ShowDialog()
+        End If
 
         Console.WriteLine()
         Console.WriteLine("Closing devices...")
@@ -176,7 +215,7 @@ Module Main
             If _Logger Is Nothing Then
                 Dim now = DateTime.Now
                 Dim LogDirectoryName = String.Format("Log-{0:0000}-{1:00}-{2:00}--{3:00}-{4:00}-{5:00}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
-                Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Status\Packet Logs", LogDirectoryName)
+                Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Status", LogDirectoryName)
                 _Logger = New Logger(LogDirectoryPath, True)
             End If
             Return _Logger
