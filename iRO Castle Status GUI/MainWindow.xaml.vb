@@ -1,4 +1,7 @@
-﻿Class MainWindow 
+﻿
+Imports System.Windows.Threading
+
+Class MainWindow
 
     Private Sub InvertRealmEnabled(sender As Object, e As RoutedEventArgs)
         For Each r In WoE.iRO.Realms
@@ -32,8 +35,23 @@
     End Sub
 
     Private Sub WoE_iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
+
+        ' not a good solution, but better than nothing
+        Static _timer As DispatcherTimer
+        If _timer Is Nothing Then
+            _timer = New DispatcherTimer
+            _timer.Interval = TimeSpan.FromMilliseconds(1)
+            AddHandler _timer.Tick, Sub(s2, e2)
+                                        _timer.Stop()
+                                        BreakLogListView.ScrollIntoView(WoE.iRO.AllCastleBreaks.Last)
+                                    End Sub
+        End If
+        _timer.Stop()
+        _timer.Start()
+
         ' not working
         'BreakLogListView.UpdateLayout()
+        'BreakLogListView.GetBindingExpression(ListView.ItemsSourceProperty).UpdateTarget()
         'BreakLogListView.ScrollIntoView(WoE.iRO.AllCastleBreaks.Last)
     End Sub
 
