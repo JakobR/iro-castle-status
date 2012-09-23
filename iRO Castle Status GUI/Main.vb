@@ -71,7 +71,7 @@ Module Main
         Next
 
         Console.WriteLine()
-        Console.WriteLine("This application will capture packets from all devices.")
+        Console.WriteLine("This application will capture TCP/IP packets from all devices.")
 
         ' Start listening to all devices
         Dim CapturedDevices As New List(Of ICaptureDevice)
@@ -79,13 +79,12 @@ Module Main
             AddHandler device.OnPacketArrival, New PacketArrivalEventHandler(AddressOf device_OnPacketArrival)
 
             device.Open(DeviceMode.Promiscuous, 1000)
-
             device.Filter = "ip and tcp"
-
-            Console.WriteLine("-- Listening on {0}...", device.Description)
 
             device.StartCapture()
             CapturedDevices.Add(device)
+
+            Console.WriteLine("-- Listening on {0}...", device.Description)
         Next
 
         Console.WriteLine()
@@ -128,7 +127,6 @@ Module Main
         Dim length = e.Packet.Data.Length
 
         Dim packet = PacketDotNet.Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data)
-
         Dim tcpPacket = PacketDotNet.TcpPacket.GetEncapsulated(packet)
 
         If tcpPacket IsNot Nothing Then
@@ -162,7 +160,6 @@ Module Main
 
             'Only process packets from the iRO servers
             If srcIp.BelongsToGravity Then
-
                 Dim payload = tcpPacket.PayloadData
 
                 If payload IsNot Nothing Then
@@ -171,7 +168,6 @@ Module Main
 
                     WoE.iRO.ProcessBreakMessage(time, Text)
                 End If
-
             End If 'srcIp.BelongsToGravity
 
         End If
@@ -180,8 +176,6 @@ Module Main
 
 
     Private Sub iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
-        'Console.WriteLine("[{0}:{1}] -- {5}{3} {4} -- {2}", e.Time.Hour, e.Time.Minute, e.NewOwningGuild, e.Realm.Name, e.Castle.Number, New String(" "c, If(e.Realm.Name.Length <= 10, 10 - e.Realm.Name.Length, 0)))
-
         Console.WriteLine()
         Console.WriteLine()
         Console.WriteLine()
@@ -191,19 +185,12 @@ Module Main
         Console.WriteLine()
 
         For Each r In WoE.iRO.Realms
-
             If r.HasAtLeastOneBreak Then
-
                 For Each c In r.Castles
-
                     Console.WriteLine("{1,10} {2} -- {0}", c.OwningGuild, r.Name, c.Number)
-
                 Next
-
                 Console.WriteLine()
-
             End If
-
         Next
     End Sub
 
