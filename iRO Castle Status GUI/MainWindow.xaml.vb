@@ -43,7 +43,9 @@ Class MainWindow
             _timer.Interval = TimeSpan.FromMilliseconds(1)
             AddHandler _timer.Tick, Sub(s2, e2)
                                         _timer.Stop()
-                                        BreakLogListView.ScrollIntoView(WoE.iRO.AllCastleBreaks.Last)
+                                        Dim last = WoE.iRO.AllCastleBreaks.Last
+                                        BreakLogListView.ScrollIntoView(last)
+                                        BreakLogListView.SelectedItem = last
                                     End Sub
         End If
         _timer.Stop()
@@ -53,6 +55,8 @@ Class MainWindow
         'BreakLogListView.UpdateLayout()
         'BreakLogListView.GetBindingExpression(ListView.ItemsSourceProperty).UpdateTarget()
         'BreakLogListView.ScrollIntoView(WoE.iRO.AllCastleBreaks.Last)
+        ' this line does select the last item though, even if it's not yet in the list
+        'BreakLogListView.SelectedItem = WoE.iRO.AllCastleBreaks.Last
     End Sub
 
 End Class
