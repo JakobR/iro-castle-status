@@ -5,47 +5,61 @@
         xmlns:local="clr-namespace:iROCastleStatus.GUIApplication"
         Title="iRO Castle Status" Width="800" Height="675">
     <Window.Resources>
-        <HierarchicalDataTemplate DataType="{x:Type lib:Realm}" ItemsSource="{Binding Castles}">
-            <TextBlock Text="{Binding Name}" />
-        </HierarchicalDataTemplate>
         
-        <DataTemplate DataType="{x:Type lib:Castle}">
-            <StackPanel Orientation="Horizontal">
-                <TextBlock FontSize="24" x:Name="CastleInfoTextBlock">
+        <ResourceDictionary>
+            
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="StretchTreeViewItemStyle.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            
+        
+            <HierarchicalDataTemplate DataType="{x:Type lib:Realm}" ItemsSource="{Binding Castles}">
+                <TextBlock Text="{Binding Name}" />
+            </HierarchicalDataTemplate>
+        
+            <DataTemplate DataType="{x:Type lib:Castle}">
+                <DockPanel LastChildFill="True">
+                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" DockPanel.Dock="Right">
+                        <TextBlock.Text>
+                            <Binding StringFormat="{}({0})" Path="Breaks.Count" />
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBlock FontSize="24" x:Name="CastleInfoTextBlock" DockPanel.Dock="Left">
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="{}{0} {1}: ">
+                                <Binding Path="Realm.Name" />
+                                <Binding Path="Number" />
+                            </MultiBinding>
+                        </TextBlock.Text>
+                    </TextBlock>
+                    <TextBox Text="{Binding OwningGuild}" MinWidth="120" BorderThickness="0" FontSize="24" Background="Transparent" Foreground="{Binding Foreground,ElementName=CastleInfoTextBlock}" />
+                </DockPanel>
+            </DataTemplate>
+        
+            <DataTemplate DataType="{x:Type lib:Castle+Break}">
+                <TextBlock FontFamily="Courier New" FontSize="16">
                     <TextBlock.Text>
-                        <MultiBinding StringFormat="{}{0} {1}: ">
-                            <Binding Path="Realm.Name" />
-                            <Binding Path="Number" />
+                        <MultiBinding StringFormat="{}[{0:00}:{1:00}] {2,10} {3} -- {4}">
+                            <Binding Path="Time.Hour" />
+                            <Binding Path="Time.Minute" />
+                            <Binding Path="Castle.Realm.Name" />
+                            <Binding Path="Castle.Number" />
+                            <Binding Path="BreakingGuild" />
                         </MultiBinding>
                     </TextBlock.Text>
                 </TextBlock>
-                <TextBox Text="{Binding OwningGuild}" MinWidth="120" BorderThickness="0" FontSize="24" Background="Transparent" Foreground="{Binding Foreground,ElementName=CastleInfoTextBlock}" />
-            </StackPanel>
-        </DataTemplate>
-        
-        <DataTemplate DataType="{x:Type lib:Castle+Break}">
-            <TextBlock FontFamily="Courier New" FontSize="16">
-                <TextBlock.Text>
-                    <MultiBinding StringFormat="{}[{0:00}:{1:00}] {2,10} {3} -- {4}">
-                        <Binding Path="Time.Hour" />
-                        <Binding Path="Time.Minute" />
-                        <Binding Path="Castle.Realm.Name" />
-                        <Binding Path="Castle.Number" />
-                        <Binding Path="BreakingGuild" />
-                    </MultiBinding>
-                </TextBlock.Text>
-            </TextBlock>
-        </DataTemplate>
+            </DataTemplate>
 
-        <local:CastleAndRealmVisibilityConverter x:Key="CastleAndRealmVisibilityConverter" />
+            <local:CastleAndRealmVisibilityConverter x:Key="CastleAndRealmVisibilityConverter" />
         
-        <Style TargetType="{x:Type local:StretchingTreeViewItem}">
-            <Setter Property="IsExpanded" Value="True" />
-            <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
-            <Setter Property="Focusable" Value="False" />
-        </Style>
-        
-        <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
+            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource StretchTreeViewItemStyle}">
+                <Setter Property="IsExpanded" Value="True" />
+                <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
+                <Setter Property="Focusable" Value="False" />
+            </Style>
+
+            <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
+        </ResourceDictionary>
     </Window.Resources>
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Bottom" Margin="5">
@@ -55,6 +69,7 @@
                 <Button x:Name="ShowWoE2" Width="50">WoE 2</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+                <Button x:Name="DebugBreakButton" Width="120" Visibility="Collapsed">Break stuff</Button>
                 <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}">Stay on top</CheckBox>
             </StackPanel>
         </Grid>
@@ -65,11 +80,11 @@
                 <ColumnDefinition Width="395" />
             </Grid.ColumnDefinitions>
 
-            <local:StretchingTreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
+            <TreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" ShowsPreview="False" />
 
-            <ListView Grid.Column="2" ItemsSource="{Binding AllCastleBreaks,Source={StaticResource iRO}}" />
+            <ListView x:Name="BreakLogListView" Grid.Column="2" ItemsSource="{Binding AllCastleBreaks,Source={StaticResource iRO}}" />
 
         </Grid>
     </DockPanel>

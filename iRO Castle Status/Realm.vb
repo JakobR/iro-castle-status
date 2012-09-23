@@ -102,8 +102,8 @@ Public Class Realm
     End Property
 
     Private Sub Castle_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
-        RaiseEvent BreakOccurred(Me, New Castle.BreakEventArgs() With {.Realm = Me, .Castle = e.Castle, .NewOwningGuild = e.NewOwningGuild, .Time = e.Time})
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("HasAtLeastOneBreak"))
+        RaiseEvent BreakOccurred(Me, New Castle.BreakEventArgs() With {.Realm = Me, .Castle = e.Castle, .NewOwningGuild = e.NewOwningGuild, .Time = e.Time})
     End Sub
 
 End Class

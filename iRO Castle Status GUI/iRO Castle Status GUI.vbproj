@@ -54,6 +54,7 @@
     <Reference Include="PacketDotNet">
       <HintPath>..\Components\SharpPcap-4.1.0\Release\PacketDotNet.dll</HintPath>
     </Reference>
+    <Reference Include="PresentationFramework.Aero" />
     <Reference Include="SharpPcap">
       <HintPath>..\Components\SharpPcap-4.1.0\Release\SharpPcap.dll</HintPath>
     </Reference>
@@ -76,7 +77,6 @@
     <Compile Include="ConsoleManager.vb" />
     <Compile Include="Logger.vb" />
     <Compile Include="Main.vb" />
-    <Compile Include="StretchingTreeView.vb" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -85,6 +85,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="StretchTreeViewItemStyle.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Import Include="System.Threading.Tasks" />

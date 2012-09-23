@@ -84,9 +84,9 @@ Public Class Castle
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
         _OwningGuild = Nothing
         _Breaks.Add(New Break(Me, Time, BreakingGuild))
-        RaiseEvent BreakOccurred(Me, New BreakEventArgs With {.Castle = Me, .Time = Time, .NewOwningGuild = BreakingGuild})
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Breaks"))
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("OwningGuild"))
+        RaiseEvent BreakOccurred(Me, New BreakEventArgs With {.Castle = Me, .Time = Time, .NewOwningGuild = BreakingGuild})
     End Sub
 
 
