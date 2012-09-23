@@ -7,11 +7,15 @@
     End Sub
 
     Private Sub DebugBreakButton_Click(sender As Object, e As RoutedEventArgs) Handles DebugBreakButton.Click
-        WoE.iRO.ProcessBreakMessage(Now, "The [BalderGuild5] castle has been conquered by the [Valkyrie] guild.")
-        WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie Realms 5] castle has been conquered by the [Warrior Nation] guild.")
-        WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie] guild conquered the [Valfreyja 3] of Horn.")
-        WoE.iRO.ProcessBreakMessage(Now, "The [Warrior Nation] guild conquered the [Valfreyja 5] stronghold of Banadis.")
-        WoE.iRO.ProcessBreakMessage(Now, "The [Nithafjoll 1] stronghold of Himinn is occupied by the [Revelations] Guild.")
+        Dim packet_start = Chr(&H9A) & Chr(0) & Chr(80) & Chr(0)
+        Dim packet_end = Chr(0)
+        WoE.iRO.ProcessBreakMessage(Now, packet_start & "The [BalderGuild5] castle has been conquered by the [Valkyrie] guild." & packet_end)
+        WoE.iRO.ProcessBreakMessage((Now - TimeSpan.FromMinutes(4)), packet_start & "The [Valkyrie Realms 5] castle has been conquered by the [blah] guild." & packet_end)
+        WoE.iRO.ProcessBreakMessage(Now, packet_start & "The [Valkyrie Realms 5] castle has been conquered by the [Warrior Nation] guild." & packet_end)
+        WoE.iRO.ProcessBreakMessage(Now, packet_start & "The [Valkyrie] guild conquered the [Valfreyja 3] of Horn." & packet_end)
+        WoE.iRO.ProcessBreakMessage(Now, packet_start & "The [Warrior Nation] guild conquered the [Valfreyja 5] stronghold of Banadis." & packet_end)
+        WoE.iRO.ProcessBreakMessage(Now, packet_start & "The [Nithafjoll 1] stronghold of Himinn is occupied by the [Revelations] Guild." & packet_end)
+        WoE.iRO.ProcessBreakMessage(Now, packet_start & "f3498sag3" & packet_start & "The [Nithafjoll 2] stronghold of Himinn is occupied by the [Revelations] Guild." & packet_end & "sdkfj83gq93gn" & packet_start & "The [Nithafjoll 3] stronghold of Himinn is occupied by the [Revelations] Guild." & packet_end & "afrpokf09gk4hgrjtssss" & packet_start & "The [Warrior Nation] guild conquered the [Valfreyja 2] stronghold of asdfsg." & packet_end & "s" & packet_start & "The [Luina Guild 3] castle has been conquered by the [Valkyrie] guild." & packet_end & "asdfergv")
         'BreakLogListView.ScrollIntoView(WoE.iRO.AllCastleBreaks.Last)
     End Sub
 

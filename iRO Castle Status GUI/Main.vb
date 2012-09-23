@@ -127,12 +127,10 @@ Module Main
                 Dim payload = tcpPacket.PayloadData
 
                 If payload IsNot Nothing Then
-                    ' Get text, starts at 4th byte and is zero-terminated.
+                    ' very cheap processing. just "convert" to ASCII and the regex will do the rest...
                     Dim text = System.Text.Encoding.ASCII.GetString(payload, 0, payload.Length)
 
-                    WoE.iRO.ProcessBreakMessage(time, text)
-
-                    'ProcessPacketPayload(time, payload, 0, payload.Length)
+                    WoE.iRO.ProcessBreakMessage(time, Text)
                 End If
 
             End If 'srcIp.BelongsToGravity
@@ -141,63 +139,6 @@ Module Main
 
     End Sub
 
-    Private Sub ProcessPacketPayload(time As Date, payload As Byte(), offset As Integer, length As Integer)
-
-        Debug.Assert(payload IsNot Nothing)
-        Debug.Assert(offset >= 0)
-        Debug.Assert(offset + length <= payload.Length)
-
-        '&H8E = Incoming publc chat; Chat data starts at the fourth byte, and is zero-terminated (so chop off one byte at the end).
-        '&H9A = Incoming server message (WoE messages, 'Ultimate yells blah blah', probably GM shouts too)
-        'not sure if the second byte belongs to this packet code as well... it's been always 0 for these types of packets.
-        'the 3rd byte seems to be the packet length (probably 3rd and 4th together though).
-        'there can be more packets 'glued' together.
-        'woe messages are like server yells, but start with 'ssss', which is not diplayed...!?
-
-        ' Too short? Can't be much interesting data inside...
-        If length < 5 Then
-            Exit Sub
-        End If
-
-        ' Packets starting with either &H87 or &7F with a length of 6 bytes seem to be something else...
-        If payload.Length = 6 AndAlso (payload(0) = &H87 Or payload(0) = &H7F) Then
-            Exit Sub
-        End If
-
-        ' Calculate length of the data for this part of the packet (I really hope this format fits all the packets, otherwise something may break...)
-        Dim datalength = payload(2) + payload(3) * &HFF
-
-        If datalength > length Then
-            Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength > length! More info: time={0}, payload.length={1}, offset={2}, length={3}", time, payload.Length, offset, length)
-            Exit Sub
-        End If
-
-        If datalength = 0 Then
-            Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength = 0! More info: time={0}, payload.length={1}, offset={2}, length={3}", time, payload.Length, offset, length)
-            Exit Sub
-        End If
-
-        ' First two bytes determine the packet type.
-        If payload(0) = &H9A AndAlso payload(1) = &H0 Then ' It's a server message!
-
-            ' Get text, starts at 4th byte and is zero-terminated.
-            Dim text = System.Text.Encoding.ASCII.GetString(payload, offset + 4, datalength - 5)
-
-            Console.WriteLine("Incoming server message: ""{0}""", text)
-
-            ' If it starts with "ssss", it's a WoE message!
-            If text.StartsWith("ssss") Then
-                WoE.iRO.ProcessBreakMessage(time, text.Substring(4))
-            End If
-
-        ElseIf payload(0) = &H8E AndAlso payload(1) = &H0 Then ' It's a public chat message!
-            ' Process other packet types...
-        End If
-
-        'Process next sub-packet
-        ProcessPacketPayload(time, payload, offset + datalength, length - datalength)
-
-    End Sub
 
     Private Sub iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
         'Console.WriteLine("[{0}:{1}] -- {5}{3} {4} -- {2}", e.Time.Hour, e.Time.Minute, e.NewOwningGuild, e.Realm.Name, e.Castle.Number, New String(" "c, If(e.Realm.Name.Length <= 10, 10 - e.Realm.Name.Length, 0)))
