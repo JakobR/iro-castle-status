@@ -88,7 +88,7 @@ Public Class Castle
             Dim LastBreak = Breaks.Last
             Dim diff = Time - LastBreak.Time
 
-            If diff.Seconds <= 5 Then
+            If Math.Abs(diff.TotalSeconds) <= 5 Then
                 Debug.Print("Drop break by {0} at {1:00}:{2:00} in {3} {4}.", BreakingGuild, Time.Hour, Time.Minute, Realm.Name, Number)
                 Exit Sub
             End If
