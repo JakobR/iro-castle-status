@@ -56,12 +56,12 @@
                                 <RotateTransform Angle="-90"/>
                             </TextBlock.LayoutTransform>
                             <TextBlock.Style>
-                                <Style>
+                                <Style TargetType="{x:Type TextBlock}">
                                     <Setter Property="TextBlock.Text" Value="{Binding Name}" />
                                     <Style.Triggers>
                                         <DataTrigger Binding="{Binding IsExpanded,RelativeSource={RelativeSource FindAncestor,AncestorType=Expander}}" Value="True">
                                             <!-- So cheap... Change this to draw a real line later. -->
-                                            <Setter Property="TextBlock.Text" Value="–––––––––––––––––––––––" />
+                                            <Setter Property="Text" Value="–––––––––––––––––––––––" />
                                         </DataTrigger>
                                     </Style.Triggers>
                                 </Style>
@@ -79,14 +79,29 @@
         </ResourceDictionary>
     </Window.Resources>
     <DockPanel LastChildFill="True">
-        <Grid DockPanel.Dock="Bottom" Margin="5">
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Visibility="Collapsed">
-                <!-- Maybe use check boxes for this. Maybe even a separate check box for every realm? -->
-                <Button x:Name="ShowWoE1" Width="50">WoE 1</Button>
-                <Button x:Name="ShowWoE2" Width="50">WoE 2</Button>
+        <Grid DockPanel.Dock="Bottom">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
+                <TextBlock Margin="0,0,5,0" VerticalAlignment="Center">Show:</TextBlock>
+                <ItemsControl Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" VerticalAlignment="Center">
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <VirtualizingStackPanel Orientation="Horizontal" />
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Margin="0,0,5,0" IsChecked="{Binding IsEnabled}">
+                                <CheckBox.Content>
+                                    <TextBlock Text="{Binding Name}" />
+                                </CheckBox.Content>
+                            </CheckBox>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+                <Button x:Name="InvertRealmEnabledButton" Margin="5,0,5,0" VerticalAlignment="Center">Invert selection</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="DebugBreakButton" Width="120" Visibility="Collapsed" Margin="0,0,5,0">Break stuff</Button>
+                <Button x:Name="DebugBreakButton" Visibility="Collapsed" Margin="0,0,5,0">Break stuff</Button>
                 <CheckBox x:Name="VerticalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0">Vertical layout</CheckBox>
                 <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}">Stay on top</CheckBox>
             </StackPanel>
@@ -132,13 +147,13 @@
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
                 <ItemsControl.Style>
-                    <Style>
+                    <Style TargetType="{x:Type ItemsControl}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="True">
-                                <Setter Property="ItemsControl.Visibility" Value="Visible" />
+                                <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
                             <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="False">
-                                <Setter Property="ItemsControl.Visibility" Value="Collapsed" />
+                                <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
                     </Style>

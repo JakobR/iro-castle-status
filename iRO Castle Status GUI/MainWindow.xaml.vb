@@ -1,15 +1,9 @@
 ﻿Class MainWindow 
 
-    Private Sub ShowWoE1_Click(sender As Object, e As RoutedEventArgs) Handles ShowWoE1.Click
-        ShowWoE(WoE.Type.WoE1)
-    End Sub
-
-    Private Sub ShowWoE2_Click(sender As Object, e As RoutedEventArgs) Handles ShowWoE2.Click
-        ShowWoE(WoE.Type.WoE2)
-    End Sub
-
-    Private Sub ShowWoE(Type As WoE.Type)
-        ' ...
+    Private Sub InvertRealmEnabledButton_Click(sender As Object, e As RoutedEventArgs) Handles InvertRealmEnabledButton.Click
+        For Each r In WoE.iRO.Realms
+            r.IsEnabled = Not r.IsEnabled
+        Next
     End Sub
 
     Private Sub DebugBreakButton_Click(sender As Object, e As RoutedEventArgs) Handles DebugBreakButton.Click
@@ -25,6 +19,10 @@
 #If DEBUG Then
         DebugBreakButton.Visibility = Windows.Visibility.Visible
 #End If
+
+        For Each r In WoE.iRO.Realms
+            r.IsEnabled = (r.Type = WoE.Type.WoE1)
+        Next
 
         AddHandler WoE.iRO.BreakOccurred, AddressOf WoE_iRO_BreakOccurred
     End Sub
