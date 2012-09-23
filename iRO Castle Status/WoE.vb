@@ -101,7 +101,7 @@ Public Class WoE
         Yield Realm.Create("Balder", Type.WoE1,
                             Iterator Function()
                                 Yield New Castle(1)
-                                Yield New Castle(2, Enabled:=False)
+                                Yield New Castle(2, IsEnabled:=False)
                                 Yield New Castle(3)
                                 Yield New Castle(4)
                                 Yield New Castle(5)
@@ -109,7 +109,7 @@ Public Class WoE
 
         Yield Realm.Create("Britoniah", Type.WoE1,
                           Iterator Function()
-                              Yield New Castle(1, Enabled:=False)
+                              Yield New Castle(1, IsEnabled:=False)
                               Yield New Castle(2)
                               Yield New Castle(3)
                               Yield New Castle(4)
@@ -121,13 +121,13 @@ Public Class WoE
                              Yield New Castle(1)
                              Yield New Castle(2)
                              Yield New Castle(3)
-                             Yield New Castle(4, Enabled:=False)
+                             Yield New Castle(4, IsEnabled:=False)
                              Yield New Castle(5)
                          End Function())
 
         Yield Realm.Create("Valkyrie", Type.WoE1,
                             Iterator Function()
-                                Yield New Castle(1, Enabled:=False)
+                                Yield New Castle(1, IsEnabled:=False)
                                 Yield New Castle(2)
                                 Yield New Castle(3)
                                 Yield New Castle(4)

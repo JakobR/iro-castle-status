@@ -75,6 +75,18 @@ Public Class Realm
         End Set
     End Property
 
+    Private _IsEnabled As Boolean = True
+
+    Public Property IsEnabled As Boolean
+        Get
+            Return _IsEnabled
+        End Get
+        Set(value As Boolean)
+            _IsEnabled = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("IsEnabled"))
+        End Set
+    End Property
+
     Private Sub New()
     End Sub
 

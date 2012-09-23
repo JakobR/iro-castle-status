@@ -20,15 +20,15 @@ Public Class Castle
         End Set
     End Property
 
-    Private _Enabled As Boolean
+    Private _IsEnabled As Boolean
 
-    Public Property Enabled As Boolean
+    Public Property IsEnabled As Boolean
         Get
-            Return _Enabled
+            Return _IsEnabled
         End Get
         Set(value As Boolean)
-            _Enabled = value
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Enabled"))
+            _IsEnabled = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("IsEnabled"))
         End Set
     End Property
 
@@ -76,9 +76,9 @@ Public Class Castle
         End Set
     End Property
 
-    Public Sub New(Number As Integer, Optional Enabled As Boolean = True)
+    Public Sub New(Number As Integer, Optional IsEnabled As Boolean = True)
         Me.Number = Number
-        Me.Enabled = Enabled
+        Me.IsEnabled = IsEnabled
     End Sub
 
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
