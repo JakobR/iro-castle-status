@@ -78,6 +78,36 @@
             <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
         </ResourceDictionary>
     </Window.Resources>
+    <!--<Window.ContextMenu>
+         <ContextMenu>
+         <ContextMenu.Resources>
+         <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
+         </ContextMenu.Resources>
+         <ContextMenu.ItemsSource>
+         <CompositeCollection>
+         <CollectionContainer Collection="{Binding Realms,Source={StaticResource iRO}}" />
+         <MenuItem Header="Invert" Click="InvertRealmEnabled" />
+         <Separator />
+         <MenuItem Header="Vertical layout" IsCheckable="True" IsChecked="{Binding IsChecked,ElementName=VerticalLayoutCheckBox,Mode=TwoWay}" />
+         <MenuItem Header="Stay on top" IsCheckable="True" IsChecked="{Binding Path=PlacementTarget.Topmost, Mode=TwoWay, RelativeSource={RelativeSource AncestorType={x:Type ContextMenu}}}" />
+         </CompositeCollection>
+         </ContextMenu.ItemsSource>
+         <ContextMenu.ItemContainerStyle>
+         <Style>
+         <Style.Resources>
+         <local:ObjectTypeConverter x:Key="ObjectTypeConverter" />
+         </Style.Resources>
+         <Style.Triggers>
+         <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type lib:Realm}">
+         <Setter Property="MenuItem.Header" Value="{Binding Name}" />
+         <Setter Property="MenuItem.IsCheckable" Value="True" />
+         <Setter Property="MenuItem.IsChecked" Value="{Binding IsEnabled,Mode=TwoWay}" />
+         </DataTrigger>
+         </Style.Triggers>
+         </Style>
+         </ContextMenu.ItemContainerStyle>
+         </ContextMenu>
+         </Window.ContextMenu>-->
     <DockPanel LastChildFill="True">
         <Grid DockPanel.Dock="Bottom">
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Center">
@@ -98,9 +128,9 @@
                         </DataTemplate>
                     </ItemsControl.ItemTemplate>
                 </ItemsControl>
-                <Button x:Name="InvertRealmEnabledButton" Margin="5,0,5,0" VerticalAlignment="Center">Invert selection</Button>
+                <Button Margin="5,0,5,0" VerticalAlignment="Center" Click="InvertRealmEnabled">Invert selection</Button>
             </StackPanel>
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Button x:Name="DebugBreakButton" Visibility="Collapsed" Margin="0,0,5,0">Break stuff</Button>
                 <CheckBox x:Name="VerticalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0">Vertical layout</CheckBox>
                 <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}">Stay on top</CheckBox>

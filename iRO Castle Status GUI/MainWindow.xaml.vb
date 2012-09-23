@@ -1,6 +1,6 @@
 ﻿Class MainWindow 
 
-    Private Sub InvertRealmEnabledButton_Click(sender As Object, e As RoutedEventArgs) Handles InvertRealmEnabledButton.Click
+    Private Sub InvertRealmEnabled(sender As Object, e As RoutedEventArgs)
         For Each r In WoE.iRO.Realms
             r.IsEnabled = Not r.IsEnabled
         Next
