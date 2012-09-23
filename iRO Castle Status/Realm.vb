@@ -63,6 +63,18 @@ Public Class Realm
         End Set
     End Property
 
+    Private _IsExpanded As Boolean = True
+
+    Public Property IsExpanded As Boolean
+        Get
+            Return _IsExpanded
+        End Get
+        Set(value As Boolean)
+            _IsExpanded = value
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("IsExpanded"))
+        End Set
+    End Property
+
     Private Sub New()
     End Sub
 

@@ -49,7 +49,7 @@
             </DataTemplate>
             
             <DataTemplate x:Key="RealmHorizontalTemplate">
-                <Expander HorizontalAlignment="Left" VerticalAlignment="Stretch" ExpandDirection="Right">
+                <Expander HorizontalAlignment="Left" VerticalAlignment="Stretch" ExpandDirection="Right" IsExpanded="{Binding IsExpanded}">
                     <Expander.Header>
                         <TextBlock Padding="0,0,5,0">
                             <TextBlock.LayoutTransform>
@@ -74,7 +74,7 @@
             </DataTemplate>
 
             <local:CastleAndRealmVisibilityConverter x:Key="CastleAndRealmVisibilityConverter" />
-        
+
             <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
         </ResourceDictionary>
     </Window.Resources>
@@ -97,9 +97,7 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="395" />
             </Grid.ColumnDefinitions>
-            
-            <!-- Link expanded status between horizontal and vertical view -->
-            
+
             <TreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}">
                 <TreeView.Style>
                     <Style>
@@ -114,8 +112,13 @@
                     </Style>
                 </TreeView.Style>
                 <TreeView.Resources>
+                    <local:ObjectTypeConverter x:Key="ObjectTypeConverter" />
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource StretchTreeViewItemStyle}">
-                        <Setter Property="IsExpanded" Value="True" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type lib:Realm}">
+                                <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}" />
+                            </DataTrigger>
+                        </Style.Triggers>
                         <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
                         <Setter Property="Focusable" Value="False" />
                     </Style>
