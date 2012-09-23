@@ -69,11 +69,16 @@
                         </TextBlock>
                     </Expander.Header>
                     <ItemsControl ItemsSource="{Binding Castles}">
+                        <ItemsControl.Resources>
+                            <local:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
+                            <Style TargetType="{x:Type ContentPresenter}">
+                                <Setter Property="Visibility" Value="{Binding Enabled,Converter={StaticResource BooleanVisibilityConverter}}" />
+                            </Style>
+                        </ItemsControl.Resources>
                     </ItemsControl>
                 </Expander>
             </DataTemplate>
 
-            <local:CastleAndRealmVisibilityConverter x:Key="CastleAndRealmVisibilityConverter" />
 
             <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
         </ResourceDictionary>
@@ -113,13 +118,16 @@
                 </TreeView.Style>
                 <TreeView.Resources>
                     <local:ObjectTypeConverter x:Key="ObjectTypeConverter" />
+                    <local:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource StretchTreeViewItemStyle}">
                         <Style.Triggers>
                             <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type lib:Realm}">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}" />
                             </DataTrigger>
+                            <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type lib:Castle}">
+                                <Setter Property="Visibility" Value="{Binding Enabled,Converter={StaticResource BooleanVisibilityConverter}}" />
+                            </DataTrigger>
                         </Style.Triggers>
-                        <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
                         <Setter Property="Focusable" Value="False" />
                     </Style>
                 </TreeView.Resources>
@@ -145,7 +153,6 @@
                 </ItemsControl.Style>
                 <ItemsControl.Resources>
                     <Style TargetType="{x:Type ContentPresenter}">
-                        <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
                         <Setter Property="Focusable" Value="False" />
                     </Style>
                 </ItemsControl.Resources>

@@ -73,7 +73,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CastleAndRealmVisibilityConverter.vb" />
+    <Compile Include="BooleanVisibilityConverter.vb" />
     <Compile Include="ConsoleManager.vb" />
     <Compile Include="Logger.vb" />
     <Compile Include="Main.vb" />
