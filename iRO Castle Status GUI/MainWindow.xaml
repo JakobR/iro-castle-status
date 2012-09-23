@@ -5,14 +5,12 @@
         xmlns:local="clr-namespace:iROCastleStatus.GUIApplication"
         Title="iRO Castle Status" Width="800" Height="675">
     <Window.Resources>
-        
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="StretchTreeViewItemStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-        
             <HierarchicalDataTemplate DataType="{x:Type lib:Realm}" ItemsSource="{Binding Castles}">
                 <TextBlock Text="{Binding Name}" />
             </HierarchicalDataTemplate>
@@ -49,15 +47,34 @@
                     </TextBlock.Text>
                 </TextBlock>
             </DataTemplate>
+            
+            <DataTemplate x:Key="RealmHorizontalTemplate">
+                <Expander HorizontalAlignment="Left" VerticalAlignment="Stretch" ExpandDirection="Right">
+                    <Expander.Header>
+                        <TextBlock Padding="0,0,5,0">
+                            <TextBlock.LayoutTransform>
+                                <RotateTransform Angle="-90"/>
+                            </TextBlock.LayoutTransform>
+                            <TextBlock.Style>
+                                <Style>
+                                    <Setter Property="TextBlock.Text" Value="{Binding Name}" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding IsExpanded,RelativeSource={RelativeSource FindAncestor,AncestorType=Expander}}" Value="True">
+                                            <!-- So cheap... Change this to draw a real line later. -->
+                                            <Setter Property="TextBlock.Text" Value="–––––––––––––––––––––––" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                    </Expander.Header>
+                    <ItemsControl ItemsSource="{Binding Castles}">
+                    </ItemsControl>
+                </Expander>
+            </DataTemplate>
 
             <local:CastleAndRealmVisibilityConverter x:Key="CastleAndRealmVisibilityConverter" />
         
-            <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource StretchTreeViewItemStyle}">
-                <Setter Property="IsExpanded" Value="True" />
-                <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
-                <Setter Property="Focusable" Value="False" />
-            </Style>
-
             <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
         </ResourceDictionary>
     </Window.Resources>
@@ -69,7 +86,8 @@
                 <Button x:Name="ShowWoE2" Width="50">WoE 2</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-                <Button x:Name="DebugBreakButton" Width="120" Visibility="Collapsed">Break stuff</Button>
+                <Button x:Name="DebugBreakButton" Width="120" Visibility="Collapsed" Margin="0,0,5,0">Break stuff</Button>
+                <CheckBox x:Name="VerticalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0">Vertical layout</CheckBox>
                 <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}">Stay on top</CheckBox>
             </StackPanel>
         </Grid>
@@ -79,8 +97,56 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="395" />
             </Grid.ColumnDefinitions>
+            
+            <!-- Link expanded status between horizontal and vertical view -->
+            
+            <TreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}">
+                <TreeView.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="True">
+                                <Setter Property="TreeView.Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="False">
+                                <Setter Property="TreeView.Visibility" Value="Visible" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.Style>
+                <TreeView.Resources>
+                    <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource StretchTreeViewItemStyle}">
+                        <Setter Property="IsExpanded" Value="True" />
+                        <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
+                        <Setter Property="Focusable" Value="False" />
+                    </Style>
+                </TreeView.Resources>
+            </TreeView>
 
-            <TreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}" />
+            <ItemsControl Grid.Column="0" ItemTemplate="{StaticResource RealmHorizontalTemplate}" ItemsSource="{Binding Realms,Source={StaticResource iRO}}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <VirtualizingStackPanel Orientation="Horizontal" UseLayoutRounding="True" />
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.Style>
+                    <Style>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="True">
+                                <Setter Property="ItemsControl.Visibility" Value="Visible" />
+                            </DataTrigger>
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="False">
+                                <Setter Property="ItemsControl.Visibility" Value="Collapsed" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </ItemsControl.Style>
+                <ItemsControl.Resources>
+                    <Style TargetType="{x:Type ContentPresenter}">
+                        <Setter Property="Visibility" Value="{Binding Converter={StaticResource CastleAndRealmVisibilityConverter}}" />
+                        <Setter Property="Focusable" Value="False" />
+                    </Style>
+                </ItemsControl.Resources>
+            </ItemsControl>
 
             <GridSplitter Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Stretch" Width="5" ShowsPreview="False" />
 
