@@ -131,9 +131,9 @@
                 <Button Margin="5,0,5,0" VerticalAlignment="Center" Click="InvertRealmEnabled">Invert selection</Button>
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
-                <Button x:Name="DebugBreakButton" Visibility="Collapsed" Margin="0,0,5,0">Break stuff</Button>
-                <CheckBox x:Name="VerticalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0">Vertical layout</CheckBox>
-                <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}">Stay on top</CheckBox>
+                <Button x:Name="DebugBreakButton" Visibility="Collapsed" Margin="0,0,5,0" VerticalAlignment="Center">Break stuff</Button>
+                <CheckBox x:Name="VerticalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0" VerticalAlignment="Center">Vertical layout</CheckBox>
+                <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}" VerticalAlignment="Center">Stay on top</CheckBox>
             </StackPanel>
         </Grid>
         <Grid>

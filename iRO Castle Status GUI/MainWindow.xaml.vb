@@ -11,7 +11,7 @@
         WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie Realms 5] castle has been conquered by the [Warrior Nation] guild.")
         WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie] guild conquered the [Valfreyja 3] of Horn.")
         WoE.iRO.ProcessBreakMessage(Now, "The [Warrior Nation] guild conquered the [Valfreyja 5] stronghold of Banadis.")
-        WoE.iRO.ProcessBreakMessage(Now, "The [Nithafjoll 1] stronghold of Himinn is occupied by the [Volkiba] Guild.")
+        WoE.iRO.ProcessBreakMessage(Now, "The [Nithafjoll 1] stronghold of Himinn is occupied by the [Revelations] Guild.")
         'BreakLogListView.ScrollIntoView(WoE.iRO.AllCastleBreaks.Last)
     End Sub
 

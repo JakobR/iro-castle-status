@@ -82,6 +82,18 @@ Public Class Castle
     End Sub
 
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
+
+        ' Only add the break if there wasn't already another one less than five seconds ago
+        If Breaks.Count > 0 Then
+            Dim LastBreak = Breaks.Last
+            Dim diff = Time - LastBreak.Time
+
+            If diff.Seconds <= 5 Then
+                Debug.Print("Drop break by {0} at {1:00}:{2:00} in {3} {4}.", BreakingGuild, Time.Hour, Time.Minute, Realm.Name, Number)
+                Exit Sub
+            End If
+        End If
+
         _OwningGuild = Nothing
         _Breaks.Add(New Break(Me, Time, BreakingGuild))
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("Breaks"))
