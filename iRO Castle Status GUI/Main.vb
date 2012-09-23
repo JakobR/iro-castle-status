@@ -80,13 +80,6 @@ Module Main
             device.Close()
         Next
 
-        'WoE.iRO.ProcessBreakMessage(Now, "The [BalderGuild5] castle has been conquered by the [Valkyrie] guild.")
-        'WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie Realms 5] castle has been conquered by the [Warrior Nation] guild.")
-        'WoE.iRO.ProcessBreakMessage(Now, "The [Valkyrie] guild conquered the [Valfreyja 3] of Horn.")
-        'WoE.iRO.ProcessBreakMessage(Now, "The [Warrior Nation] guild conquered the [Valfreyja 5] stronghold of Banadis.")
-        'WoE.iRO.ProcessBreakMessage(Now, "The [Nithafjoll 1] stronghold of Himinn is occupied by the [Volkiba] Guild.")
-        'Console.ReadKey()
-
     End Sub
 
     Private Sub device_OnPacketArrival(sender As Object, e As CaptureEventArgs)
@@ -134,7 +127,12 @@ Module Main
                 Dim payload = tcpPacket.PayloadData
 
                 If payload IsNot Nothing Then
-                    ProcessPacketPayload(time, payload, 0, payload.Length)
+                    ' Get text, starts at 4th byte and is zero-terminated.
+                    Dim text = System.Text.Encoding.ASCII.GetString(payload, 0, payload.Length)
+
+                    WoE.iRO.ProcessBreakMessage(time, text)
+
+                    'ProcessPacketPayload(time, payload, 0, payload.Length)
                 End If
 
             End If 'srcIp.BelongsToGravity
@@ -171,6 +169,11 @@ Module Main
 
         If datalength > length Then
             Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength > length! More info: time={0}, payload.length={1}, offset={2}, length={3}", time, payload.Length, offset, length)
+            Exit Sub
+        End If
+
+        If datalength = 0 Then
+            Debug.Print("Main.ProcessPacketPayload: Bad packet, datalength = 0! More info: time={0}, payload.length={1}, offset={2}, length={3}", time, payload.Length, offset, length)
             Exit Sub
         End If
 
