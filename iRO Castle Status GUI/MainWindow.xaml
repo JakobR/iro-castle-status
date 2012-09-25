@@ -140,7 +140,7 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="395" />
+                <ColumnDefinition x:Name="BreakLogColumn" Width="395" />
             </Grid.ColumnDefinitions>
 
             <TreeView x:Name="StatusTreeView" Grid.Column="0" ItemsSource="{Binding Realms,Source={StaticResource iRO}}">

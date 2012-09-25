@@ -58,4 +58,24 @@ Class MainWindow
         'BreakLogListView.SelectedItem = WoE.iRO.AllCastleBreaks.Last
     End Sub
 
+    Private Sub VerticalLayoutCheckBox_CheckedOrUnchecked(sender As Object, e As RoutedEventArgs) Handles VerticalLayoutCheckBox.Checked, VerticalLayoutCheckBox.Unchecked
+
+        Static OtherWidth As Double = 1600
+        Static OtherHeight As Double = 230
+        Static OtherBreakLogWidth As GridLength = New GridLength(360)
+
+        Dim tw = MainWindow.Width
+        Dim th = MainWindow.Height
+        Dim tb = BreakLogColumn.Width
+
+        MainWindow.Width = OtherWidth
+        MainWindow.Height = OtherHeight
+        BreakLogColumn.Width = OtherBreakLogWidth
+
+        OtherWidth = tw
+        OtherHeight = th
+        OtherBreakLogWidth = tb
+
+    End Sub
+
 End Class
