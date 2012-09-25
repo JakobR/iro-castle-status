@@ -50,6 +50,9 @@
   <PropertyGroup>
     <StartupObject>Sub Main</StartupObject>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Resources\emperium.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="PacketDotNet">
       <HintPath>..\Components\SharpPcap-4.1.0\Release\PacketDotNet.dll</HintPath>
@@ -138,6 +141,7 @@
       <LastGenOutput>Settings.Designer.vb</LastGenOutput>
     </None>
     <AppDesigner Include="My Project\" />
+    <None Include="Resources\emperium.xcf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">
@@ -149,6 +153,9 @@
       <Project>{1400d5f0-669a-4d81-8155-e4e3d3054c69}</Project>
       <Name>iRO Castle Status</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\emperium.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>
