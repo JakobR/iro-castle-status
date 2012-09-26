@@ -31,6 +31,17 @@ Class MainWindow
         Next
 
         AddHandler WoE.iRO.BreakOccurred, AddressOf WoE_iRO_BreakOccurred
+
+        Me.Top = My.Settings.VerticalLayout_WindowTop
+        Me.Left = My.Settings.VerticalLayout_WindowLeft
+        Me.Width = My.Settings.VerticalLayout_WindowWidth
+        Me.Height = My.Settings.VerticalLayout_WindowHeight
+        BreakLogColumn.Width = My.Settings.VerticalLayout_BreakLogWidth
+
+        If My.Settings.UseHorizontalLayout Then
+            HorizontalLayoutCheckBox.IsChecked = True
+        End If
+
     End Sub
 
     Private Sub WoE_iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
@@ -58,23 +69,63 @@ Class MainWindow
         'BreakLogListView.SelectedItem = WoE.iRO.AllCastleBreaks.Last
     End Sub
 
-    Private Sub HorizontalLayoutCheckBox_CheckedOrUnchecked(sender As Object, e As RoutedEventArgs) Handles HorizontalLayoutCheckBox.Checked, HorizontalLayoutCheckBox.Unchecked
+    Private Sub HorizontalLayoutCheckBox_Checked(sender As Object, e As RoutedEventArgs) Handles HorizontalLayoutCheckBox.Checked
 
-        Static OtherWidth As Double = 1600
-        Static OtherHeight As Double = 230
-        Static OtherBreakLogWidth As GridLength = New GridLength(390)
+        My.Settings.VerticalLayout_WindowTop = Me.Top
+        My.Settings.VerticalLayout_WindowLeft = Me.Left
+        My.Settings.VerticalLayout_WindowWidth = Me.Width
+        My.Settings.VerticalLayout_WindowHeight = Me.Height
+        My.Settings.VerticalLayout_BreakLogWidth = BreakLogColumn.Width
 
-        Dim tw = MainWindow.Width
-        Dim th = MainWindow.Height
-        Dim tb = BreakLogColumn.Width
+        Me.Top = My.Settings.HorizontalLayout_WindowTop
+        Me.Left = My.Settings.HorizontalLayout_WindowLeft
+        Me.Width = My.Settings.HorizontalLayout_WindowWidth
+        Me.Height = My.Settings.HorizontalLayout_WindowHeight
+        BreakLogColumn.Width = My.Settings.HorizontalLayout_BreakLogWidth
 
-        MainWindow.Width = OtherWidth
-        MainWindow.Height = OtherHeight
-        BreakLogColumn.Width = OtherBreakLogWidth
+        My.Settings.UseHorizontalLayout = True
 
-        OtherWidth = tw
-        OtherHeight = th
-        OtherBreakLogWidth = tb
+        My.Settings.Save()
+
+    End Sub
+
+    Private Sub HorizontalLayoutCheckBox_Unchecked(sender As Object, e As RoutedEventArgs) Handles HorizontalLayoutCheckBox.Unchecked
+
+        My.Settings.HorizontalLayout_WindowTop = Me.Top
+        My.Settings.HorizontalLayout_WindowLeft = Me.Left
+        My.Settings.HorizontalLayout_WindowWidth = Me.Width
+        My.Settings.HorizontalLayout_WindowHeight = Me.Height
+        My.Settings.HorizontalLayout_BreakLogWidth = BreakLogColumn.Width
+
+        Me.Top = My.Settings.VerticalLayout_WindowTop
+        Me.Left = My.Settings.VerticalLayout_WindowLeft
+        Me.Width = My.Settings.VerticalLayout_WindowWidth
+        Me.Height = My.Settings.VerticalLayout_WindowHeight
+        BreakLogColumn.Width = My.Settings.VerticalLayout_BreakLogWidth
+
+        My.Settings.UseHorizontalLayout = False
+
+        My.Settings.Save()
+
+    End Sub
+
+    Private Sub MainWindow_Closing(sender As Object, e As ComponentModel.CancelEventArgs) Handles Me.Closing
+
+        If HorizontalLayoutCheckBox.IsChecked Then
+            My.Settings.HorizontalLayout_WindowTop = Me.Top
+            My.Settings.HorizontalLayout_WindowLeft = Me.Left
+            My.Settings.HorizontalLayout_WindowWidth = Me.Width
+            My.Settings.HorizontalLayout_WindowHeight = Me.Height
+            My.Settings.HorizontalLayout_BreakLogWidth = BreakLogColumn.Width
+        Else
+            My.Settings.VerticalLayout_WindowTop = Me.Top
+            My.Settings.VerticalLayout_WindowLeft = Me.Left
+            My.Settings.VerticalLayout_WindowWidth = Me.Width
+            My.Settings.VerticalLayout_WindowHeight = Me.Height
+            My.Settings.VerticalLayout_BreakLogWidth = BreakLogColumn.Width
+        End If
+
+        My.Settings.Save()
 
     End Sub
 
