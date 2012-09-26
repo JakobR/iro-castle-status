@@ -2,8 +2,12 @@
 Imports System.IO
 Imports SharpPcap
 Imports iROCastleStatus
+Imports System.Threading
+Imports System.Windows.Threading
 
 Module Main
+
+    Private MainThread As Thread
 
     Public Sub Main(Args() As String)
 
@@ -42,6 +46,8 @@ Module Main
             Console.BufferWidth = 200
             Console.BufferHeight = 1000
         End If
+
+        MainThread = Thread.CurrentThread
 
         Console.WriteLine("iRO Castle Status")
         Console.WriteLine("using SharpPcap {0}", SharpPcap.Version.VersionString)
@@ -120,6 +126,7 @@ Module Main
 
     End Sub
 
+    ' Careful: This will be called from a background thread.
     Private Sub device_OnPacketArrival(sender As Object, e As CaptureEventArgs)
         Dim device = DirectCast(sender, ICaptureDevice)
 
@@ -166,14 +173,18 @@ Module Main
                     ' very cheap processing. just "convert" to ASCII and the regex will do the rest...
                     Dim text = System.Text.Encoding.ASCII.GetString(payload, 0, payload.Length)
 
-                    WoE.iRO.ProcessBreakMessage(time, Text)
+                    Dim d As Dispatcher = Dispatcher.FromThread(MainThread)
+
+                    ' Invoke this in main thread!
+                    ' (Otherwise the binding to the Breaks collection might throw an exception)
+                    ' TODO: Maybe move this to WoE.iRO.ProcessBreakMessage; and invoke only the Castle.AddBreak method in the main thread (should improve perfomance).
+                    d.BeginInvoke(New Action(Of DateTime, String)(AddressOf WoE.iRO.ProcessBreakMessage), time, text)
                 End If
             End If 'srcIp.BelongsToGravity
 
         End If
 
     End Sub
-
 
     Private Sub iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
         Console.WriteLine()
