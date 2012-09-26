@@ -132,7 +132,7 @@
             </StackPanel>
             <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
                 <Button x:Name="DebugBreakButton" Visibility="Collapsed" Margin="0,0,5,0" VerticalAlignment="Center">Break stuff</Button>
-                <CheckBox x:Name="VerticalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0" VerticalAlignment="Center">Vertical layout</CheckBox>
+                <CheckBox x:Name="HorizontalLayoutCheckBox" IsChecked="False" Margin="0,0,5,0" VerticalAlignment="Center">Horizontal layout</CheckBox>
                 <CheckBox IsChecked="{Binding Topmost,ElementName=MainWindow}" VerticalAlignment="Center">Stay on top</CheckBox>
             </StackPanel>
         </Grid>
@@ -147,10 +147,10 @@
                 <TreeView.Style>
                     <Style>
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="True">
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=HorizontalLayoutCheckBox}" Value="True">
                                 <Setter Property="TreeView.Visibility" Value="Collapsed" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="False">
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=HorizontalLayoutCheckBox}" Value="False">
                                 <Setter Property="TreeView.Visibility" Value="Visible" />
                             </DataTrigger>
                         </Style.Triggers>
@@ -179,10 +179,10 @@
                 <ItemsControl.Style>
                     <Style TargetType="{x:Type ItemsControl}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="True">
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=HorizontalLayoutCheckBox}" Value="True">
                                 <Setter Property="Visibility" Value="Visible" />
                             </DataTrigger>
-                            <DataTrigger Binding="{Binding IsChecked,ElementName=VerticalLayoutCheckBox}" Value="False">
+                            <DataTrigger Binding="{Binding IsChecked,ElementName=HorizontalLayoutCheckBox}" Value="False">
                                 <Setter Property="Visibility" Value="Collapsed" />
                             </DataTrigger>
                         </Style.Triggers>
