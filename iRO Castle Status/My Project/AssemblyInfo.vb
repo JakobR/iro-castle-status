@@ -1,6 +1,9 @@
 ﻿Imports System
 Imports System.Reflection
 Imports System.Runtime.InteropServices
+Imports System.Globalization
+Imports System.Resources
+Imports System.Windows
 
 ' General Information about an assembly is controlled through the following 
 ' set of attributes. Change these attribute values to modify the information
@@ -8,17 +11,38 @@ Imports System.Runtime.InteropServices
 
 ' Review the values of the assembly attributes
 
-<Assembly: AssemblyTitle("iRO Castle Status")> 
+<Assembly: AssemblyTitle("iRO_Castle_Status_GUI")> 
 <Assembly: AssemblyDescription("")> 
 <Assembly: AssemblyCompany("")> 
-<Assembly: AssemblyProduct("iRO Castle Status")> 
+<Assembly: AssemblyProduct("iRO_Castle_Status_GUI")> 
 <Assembly: AssemblyCopyright("Copyright ©  2012")> 
 <Assembly: AssemblyTrademark("")> 
+<Assembly: ComVisible(false)>
 
-<Assembly: ComVisible(False)>
+'In order to begin building localizable applications, set 
+'<UICulture>CultureYouAreCodingWith</UICulture> in your .vbproj file
+'inside a <PropertyGroup>.  For example, if you are using US english 
+'in your source files, set the <UICulture> to "en-US".  Then uncomment the
+'NeutralResourceLanguage attribute below.  Update the "en-US" in the line
+'below to match the UICulture setting in the project file.
+
+'<Assembly: NeutralResourcesLanguage("en-US", UltimateResourceFallbackLocation.Satellite)> 
+
+
+'The ThemeInfo attribute describes where any theme specific and generic resource dictionaries can be found.
+'1st parameter: where theme specific resource dictionaries are located
+'(used if a resource is not found in the page, 
+' or application resource dictionaries)
+
+'2nd parameter: where the generic resource dictionary is located
+'(used if a resource is not found in the page, 
+'app, and any theme specific resource dictionaries)
+<Assembly: ThemeInfo(ResourceDictionaryLocation.None, ResourceDictionaryLocation.SourceAssembly)>
+
+
 
 'The following GUID is for the ID of the typelib if this project is exposed to COM
-<Assembly: Guid("367cde2e-a8a9-4a26-8286-89f079c9d4a3")> 
+<Assembly: Guid("c237f63b-49db-456d-a2c9-dc8a54b97ade")> 
 
 ' Version information for an assembly consists of the following four values:
 '

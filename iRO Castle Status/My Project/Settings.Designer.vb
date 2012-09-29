@@ -12,16 +12,15 @@ Option Strict On
 Option Explicit On
 
 
-Namespace My
 
-    <Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(), _
-     Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0"), _
-     Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)> _
-    Partial Friend NotInheritable Class MySettings
-        Inherits Global.System.Configuration.ApplicationSettingsBase
-
-        Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()), MySettings)
-
+<Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute(),  _
+ Global.System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "11.0.0.0"),  _
+ Global.System.ComponentModel.EditorBrowsableAttribute(Global.System.ComponentModel.EditorBrowsableState.Advanced)>  _
+Partial Friend NotInheritable Class MySettings
+    Inherits Global.System.Configuration.ApplicationSettingsBase
+    
+    Private Shared defaultInstance As MySettings = CType(Global.System.Configuration.ApplicationSettingsBase.Synchronized(New MySettings()),MySettings)
+    
 #Region "My.Settings Auto-Save Functionality"
 #If _MyType = "WindowsForms" Then
     Private Shared addedHandler As Boolean
@@ -36,10 +35,10 @@ Namespace My
     End Sub
 #End If
 #End Region
-
-        Public Shared ReadOnly Property [Default]() As MySettings
-            Get
-
+    
+    Public Shared ReadOnly Property [Default]() As MySettings
+        Get
+            
 #If _MyType = "WindowsForms" Then
                If Not addedHandler Then
                     SyncLock addedHandlerLockObject
@@ -50,11 +49,142 @@ Namespace My
                     End SyncLock
                 End If
 #End If
-                Return defaultInstance
-            End Get
-        End Property
-    End Class
-End Namespace
+            Return defaultInstance
+        End Get
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("800")>  _
+    Public Property VerticalLayout_WindowWidth() As Double
+        Get
+            Return CType(Me("VerticalLayout_WindowWidth"),Double)
+        End Get
+        Set
+            Me("VerticalLayout_WindowWidth") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("675")>  _
+    Public Property VerticalLayout_WindowHeight() As Double
+        Get
+            Return CType(Me("VerticalLayout_WindowHeight"),Double)
+        End Get
+        Set
+            Me("VerticalLayout_WindowHeight") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("390")>  _
+    Public Property VerticalLayout_BreakLogWidth() As Global.System.Windows.GridLength
+        Get
+            Return CType(Me("VerticalLayout_BreakLogWidth"),Global.System.Windows.GridLength)
+        End Get
+        Set
+            Me("VerticalLayout_BreakLogWidth") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("1600")>  _
+    Public Property HorizontalLayout_WindowWidth() As Double
+        Get
+            Return CType(Me("HorizontalLayout_WindowWidth"),Double)
+        End Get
+        Set
+            Me("HorizontalLayout_WindowWidth") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("230")>  _
+    Public Property HorizontalLayout_WindowHeight() As Double
+        Get
+            Return CType(Me("HorizontalLayout_WindowHeight"),Double)
+        End Get
+        Set
+            Me("HorizontalLayout_WindowHeight") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("390")>  _
+    Public Property HorizontalLayout_BreakLogWidth() As Global.System.Windows.GridLength
+        Get
+            Return CType(Me("HorizontalLayout_BreakLogWidth"),Global.System.Windows.GridLength)
+        End Get
+        Set
+            Me("HorizontalLayout_BreakLogWidth") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("False")>  _
+    Public Property UseHorizontalLayout() As Boolean
+        Get
+            Return CType(Me("UseHorizontalLayout"),Boolean)
+        End Get
+        Set
+            Me("UseHorizontalLayout") = value
+        End Set
+    End Property
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(), _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    Public Property VerticalLayout_WindowTop() As Double
+        Get
+            Return CType(Me("VerticalLayout_WindowTop"), Double)
+        End Get
+        Set(value As Double)
+            Me("VerticalLayout_WindowTop") = value
+        End Set
+    End Property
+
+    <Global.System.Configuration.UserScopedSettingAttribute(), _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    Public Property VerticalLayout_WindowLeft() As Double
+        Get
+            Return CType(Me("VerticalLayout_WindowLeft"), Double)
+        End Get
+        Set(value As Double)
+            Me("VerticalLayout_WindowLeft") = value
+        End Set
+    End Property
+
+    <Global.System.Configuration.UserScopedSettingAttribute(), _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    Public Property HorizontalLayout_WindowTop() As Double
+        Get
+            Return CType(Me("HorizontalLayout_WindowTop"), Double)
+        End Get
+        Set(value As Double)
+            Me("HorizontalLayout_WindowTop") = value
+        End Set
+    End Property
+
+    <Global.System.Configuration.UserScopedSettingAttribute(), _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    Public Property HorizontalLayout_WindowLeft() As Double
+        Get
+            Return CType(Me("HorizontalLayout_WindowLeft"), Double)
+        End Get
+        Set(value As Double)
+            Me("HorizontalLayout_WindowLeft") = value
+        End Set
+    End Property
+End Class
 
 Namespace My
 
@@ -64,9 +194,9 @@ Namespace My
     Friend Module MySettingsProperty
 
         <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")> _
-        Friend ReadOnly Property Settings() As Global.iROCastleStatus.My.MySettings
+        Friend ReadOnly Property Settings() As Global.iROCastleStatus.MySettings
             Get
-                Return Global.iROCastleStatus.My.MySettings.Default
+                Return Global.iROCastleStatus.MySettings.Default
             End Get
         End Property
     End Module
