@@ -7,10 +7,25 @@
     <ProjectGuid>{C5FC858A-AD94-45CE-A9A5-23B72B7FDD79}</ProjectGuid>
     <ProjectTypeGuids>{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{F184B08F-C81C-45F6-A57F-5ABD9991F28F}</ProjectTypeGuids>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>iROCastleStatus.GUIApplication</RootNamespace>
-    <AssemblyName>iROCastleStatusGUI</AssemblyName>
+    <RootNamespace>iROCastleStatus</RootNamespace>
+    <AssemblyName>iROCastleStatus</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <MyType>Custom</MyType>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -20,7 +35,7 @@
     <DefineTrace>true</DefineTrace>
     <IncrementalBuild>true</IncrementalBuild>
     <OutputPath>bin\Debug\</OutputPath>
-    <DocumentationFile>iROCastleStatusGUI.xml</DocumentationFile>
+    <DocumentationFile>iROCastleStatus.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
@@ -32,7 +47,7 @@
     <IncrementalBuild>false</IncrementalBuild>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DocumentationFile>iROCastleStatusGUI.xml</DocumentationFile>
+    <DocumentationFile>iROCastleStatus.xml</DocumentationFile>
     <NoWarn>41999,42016,42017,42018,42019,42020,42021,42022,42032,42036,42314</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -76,20 +91,24 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BooleanVisibilityConverter.vb" />
-    <Compile Include="ConsoleManager.vb" />
-    <Compile Include="Logger.vb" />
-    <Compile Include="Main.vb" />
-    <Compile Include="ObjectTypeConverter.vb" />
-    <Page Include="MainWindow.xaml">
+    <Compile Include="Code\GUI\Helpers\BooleanVisibilityConverter.vb" />
+    <Compile Include="Code\Helpers\ConsoleManager.vb" />
+    <Compile Include="Code\Helpers\Logger.vb" />
+    <Compile Include="Code\Main.vb" />
+    <Compile Include="Code\GUI\Helpers\ObjectTypeConverter.vb" />
+    <Compile Include="Code\WoE\Castle.vb" />
+    <Compile Include="Code\WoE\IPAddressExtension.vb" />
+    <Compile Include="Code\WoE\Realm.vb" />
+    <Compile Include="Code\WoE\WoE.vb" />
+    <Page Include="Code\GUI\MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
-    <Compile Include="MainWindow.xaml.vb">
+    <Compile Include="Code\GUI\MainWindow.xaml.vb">
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="StretchTreeViewItemStyle.xaml">
+    <Page Include="Code\GUI\Helpers\StretchTreeViewItemStyle.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -149,13 +168,42 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\iRO Castle Status\iRO Castle Status.vbproj">
-      <Project>{1400d5f0-669a-4d81-8155-e4e3d3054c69}</Project>
-      <Name>iRO Castle Status</Name>
-    </ProjectReference>
+    <Resource Include="Resources\emperium.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\emperium.ico" />
+    <Resource Include="Resources\alde_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\aru_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\gef_fild13.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\pay_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\prt_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\sch_gld.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.5">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4.5 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
 </Project>

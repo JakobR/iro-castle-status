@@ -1,8 +1,7 @@
 ﻿<Window x:Class="MainWindow" x:Name="MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:lib="clr-namespace:iROCastleStatus;assembly=iROCastleStatus"
-        xmlns:local="clr-namespace:iROCastleStatus.GUIApplication"
+        xmlns:local="clr-namespace:iROCastleStatus"
         Title="iRO Castle Status" Width="800" Height="675">
     <Window.Resources>
         <ResourceDictionary>
@@ -11,11 +10,11 @@
                 <ResourceDictionary Source="StretchTreeViewItemStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
-            <HierarchicalDataTemplate DataType="{x:Type lib:Realm}" ItemsSource="{Binding Castles}">
+            <HierarchicalDataTemplate DataType="{x:Type local:Realm}" ItemsSource="{Binding Castles}">
                 <TextBlock Text="{Binding Name}" />
             </HierarchicalDataTemplate>
         
-            <DataTemplate DataType="{x:Type lib:Castle}">
+            <DataTemplate DataType="{x:Type local:Castle}">
                 <DockPanel LastChildFill="True">
                     <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Foreground="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}" DockPanel.Dock="Right">
                         <TextBlock.Text>
@@ -34,7 +33,7 @@
                 </DockPanel>
             </DataTemplate>
         
-            <DataTemplate DataType="{x:Type lib:Castle+Break}">
+            <DataTemplate DataType="{x:Type local:Castle+Break}">
                 <TextBlock FontFamily="Courier New" FontSize="16">
                     <TextBlock.Text>
                         <MultiBinding StringFormat="{}[{0:00}:{1:00}] {2,10} {3} -- {4}">
@@ -75,13 +74,13 @@
 
             <local:BooleanVisibilityConverter x:Key="BooleanVisibilityConverter" />
 
-            <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
+            <x:StaticExtension Member="local:WoE.iRO" x:Key="iRO" />
         </ResourceDictionary>
     </Window.Resources>
     <!--<Window.ContextMenu>
          <ContextMenu>
          <ContextMenu.Resources>
-         <x:StaticExtension Member="lib:WoE.iRO" x:Key="iRO" />
+         <x:StaticExtension Member="local:WoE.iRO" x:Key="iRO" />
          </ContextMenu.Resources>
          <ContextMenu.ItemsSource>
          <CompositeCollection>
@@ -98,7 +97,7 @@
          <local:ObjectTypeConverter x:Key="ObjectTypeConverter" />
          </Style.Resources>
          <Style.Triggers>
-         <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type lib:Realm}">
+         <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type local:Realm}">
          <Setter Property="MenuItem.Header" Value="{Binding Name}" />
          <Setter Property="MenuItem.IsCheckable" Value="True" />
          <Setter Property="MenuItem.IsChecked" Value="{Binding IsEnabled,Mode=TwoWay}" />
@@ -160,7 +159,7 @@
                     <local:ObjectTypeConverter x:Key="ObjectTypeConverter" />
                     <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource StretchTreeViewItemStyle}">
                         <Style.Triggers>
-                            <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type lib:Realm}">
+                            <DataTrigger Binding="{Binding Converter={StaticResource ObjectTypeConverter}}" Value="{x:Type local:Realm}">
                                 <Setter Property="IsExpanded" Value="{Binding IsExpanded,Mode=TwoWay}" />
                             </DataTrigger>
                         </Style.Triggers>
