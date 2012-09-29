@@ -1,5 +1,4 @@
 ﻿
-Imports System.Text.RegularExpressions
 Imports System.ComponentModel
 
 Public Class WoE
@@ -35,59 +34,6 @@ Public Class WoE
 
         Return w
     End Function
-
-    Private ReadOnly Property WoEMessageRegex As Regex
-        Get
-            Static _regex As Regex
-
-            If _regex Is Nothing Then
-
-                Dim packet_start = ".\x00.." ' need to use the singleline options, so that "." matches all characters.
-                Dim packet_end = "\x00"
-
-                Dim realm_regex = "\[(?<realm>\w+?)\s?(Guild\s?|Realms\s?|)(?<number>\d)\]"
-                Dim castlename_regex = "(?<castle>\w+?)"
-                Dim guild_regex = "\[(?<guild>[^\x00\n\r]+?)\]"
-
-                Dim woe1regex = String.Format("{2}(ssss)?The {0} castle has been conquered by the {1} guild\.{3}", realm_regex, guild_regex, packet_start, packet_end)
-                Dim woe2regex = String.Format("{3}The {0} guild conquered the {1} (stronghold )?of {2}\.{4}", guild_regex, realm_regex, castlename_regex, packet_start, packet_end)
-                Dim woe2regex2 = String.Format("{3}The {0} (stronghold )?of {1} is occupied by the {2} Guild\.{4}", realm_regex, castlename_regex, guild_regex, packet_start, packet_end)
-
-                'Use combined regex
-                _regex = New Regex(String.Format("({0}|{1}|{2})", woe1regex, woe2regex, woe2regex2), RegexOptions.ExplicitCapture And RegexOptions.Singleline And RegexOptions.Compiled)
-            End If
-
-            Return _regex
-        End Get
-    End Property
-
-    Public Sub ProcessBreakMessage(Time As DateTime, Message As String)
-
-        For Each match As Match In WoEMessageRegex.Matches(Message)
-
-            Debug.Assert(match.Success)
-            If Not match.Success Then
-                Continue For
-            End If
-
-            Dim info = New With {
-                                    .RealmName = match.Groups("realm").Value.TrimStart(),
-                                    .CastleNumber = Integer.Parse(match.Groups("number").Value),
-                                    .GuildName = match.Groups("guild").Value
-                                }
-
-            Dim realm = Aggregate r In Realms Where info.RealmName.StartsWith(r.Name) Into FirstOrDefault()
-
-            If realm IsNot Nothing AndAlso info.CastleNumber >= 1 AndAlso info.CastleNumber <= realm.Castles.Count Then
-
-                realm.GetCastleWithNumber(info.CastleNumber).AddBreak(Time, info.GuildName)
-
-
-            End If
-
-        Next
-
-    End Sub
 
     Public ReadOnly Property AllCastleBreaks() As IEnumerable(Of Castle.Break)
         Get
