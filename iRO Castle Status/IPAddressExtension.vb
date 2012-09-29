@@ -1,5 +1,5 @@
 ﻿
-Public Module IPAddress
+Public Module IPAddressExtension
 
     ''' <summary>
     ''' Checks if the IP address is in Gravity's Network, which seems to be 128.241.92.0/23.
