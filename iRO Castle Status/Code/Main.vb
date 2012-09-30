@@ -10,6 +10,7 @@ Module Main
 
     Private MainThread As Thread
 
+    <STAThread>
     Public Sub Main(Args() As String)
 
         ' Parse command line options
@@ -49,6 +50,8 @@ Module Main
         End If
 
         MainThread = Thread.CurrentThread
+        Debug.Assert(MainThread.GetApartmentState() = ApartmentState.STA)
+        'MessageBox.Show(String.Format("Thread Apartment: {0}", MainThread.GetApartmentState))
 
         Console.WriteLine("iRO Castle Status")
         Console.WriteLine("using SharpPcap {0}", SharpPcap.Version.VersionString)
@@ -271,7 +274,7 @@ Module Main
             End If
             Return _Logger
 #Else
-                Return Nothing
+            Return Nothing
 #End If
         End Get
     End Property
