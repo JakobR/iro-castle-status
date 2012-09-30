@@ -59,63 +59,60 @@ Public Class WoE
         End Get
     End Property
 
-    Private Shared Iterator Function iRO_CreateRealms() As IEnumerable(Of Realm)
+    Private Shared Function iRO_CreateRealms() As IEnumerable(Of Realm)
 
         ' TODO: Read this stuff from an xml file or so...
 
-        Yield Realm.Create("Balder", Type.WoE1,
-                            Iterator Function()
-                                Yield New Castle(1)
-                                Yield New Castle(2, IsEnabled:=False)
-                                Yield New Castle(3)
-                                Yield New Castle(4)
-                                Yield New Castle(5)
-                            End Function())
-
-        Yield Realm.Create("Britoniah", Type.WoE1,
-                          Iterator Function()
-                              Yield New Castle(1, IsEnabled:=False)
-                              Yield New Castle(2)
-                              Yield New Castle(3)
-                              Yield New Castle(4)
-                              Yield New Castle(5)
-                          End Function())
-
-        Yield Realm.Create("Luina", Type.WoE1,
-                         Iterator Function()
-                             Yield New Castle(1)
-                             Yield New Castle(2)
-                             Yield New Castle(3)
-                             Yield New Castle(4, IsEnabled:=False)
-                             Yield New Castle(5)
-                         End Function())
-
-        Yield Realm.Create("Valkyrie", Type.WoE1,
-                            Iterator Function()
-                                Yield New Castle(1, IsEnabled:=False)
-                                Yield New Castle(2)
-                                Yield New Castle(3)
-                                Yield New Castle(4)
-                                Yield New Castle(5)
-                            End Function())
-
-        Yield Realm.Create("Nithafjoll", Type.WoE2,
-                            Iterator Function()
-                                Yield New Castle(1)
-                                Yield New Castle(2)
-                                Yield New Castle(3)
-                                Yield New Castle(4)
-                                Yield New Castle(5)
-                            End Function())
-
-        Yield Realm.Create("Valfreyja", Type.WoE2,
-                           Iterator Function()
-                               Yield New Castle(1)
-                               Yield New Castle(2)
-                               Yield New Castle(3)
-                               Yield New Castle(4)
-                               Yield New Castle(5)
-                           End Function())
+        Return {
+                Realm.Create("Balder", Type.WoE1,
+                                {
+                                    New Castle(1),
+                                    New Castle(2, IsEnabled:=False),
+                                    New Castle(3),
+                                    New Castle(4),
+                                    New Castle(5)
+                                }),
+                Realm.Create("Britoniah", Type.WoE1,
+                                {
+                                    New Castle(1, IsEnabled:=False),
+                                    New Castle(2),
+                                    New Castle(3),
+                                    New Castle(4),
+                                    New Castle(5)
+                                }),
+                Realm.Create("Luina", Type.WoE1,
+                                {
+                                    New Castle(1),
+                                    New Castle(2),
+                                    New Castle(3),
+                                    New Castle(4, IsEnabled:=False),
+                                    New Castle(5)
+                                }),
+                Realm.Create("Valkyrie", Type.WoE1,
+                                {
+                                    New Castle(1, IsEnabled:=False),
+                                    New Castle(2),
+                                    New Castle(3),
+                                    New Castle(4),
+                                    New Castle(5)
+                                }),
+                Realm.Create("Nithafjoll", Type.WoE2,
+                                {
+                                    New Castle(1),
+                                    New Castle(2),
+                                    New Castle(3),
+                                    New Castle(4),
+                                    New Castle(5)
+                                }),
+                Realm.Create("Valfreyja", Type.WoE2,
+                                {
+                                    New Castle(1),
+                                    New Castle(2),
+                                    New Castle(3),
+                                    New Castle(4),
+                                    New Castle(5)
+                                })
+        }
 
     End Function
 
