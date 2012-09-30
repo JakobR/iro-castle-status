@@ -7,7 +7,7 @@
         <ResourceDictionary>
             
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="StretchTreeViewItemStyle.xaml" />
+                <ResourceDictionary Source="Helpers/StretchTreeViewItemStyle.xaml" />
             </ResourceDictionary.MergedDictionaries>
             
             <HierarchicalDataTemplate DataType="{x:Type local:Realm}" ItemsSource="{Binding Castles}">
