@@ -230,7 +230,7 @@ Module Main
             If realm IsNot Nothing AndAlso info.CastleNumber >= 1 AndAlso info.CastleNumber <= realm.Castles.Count Then
 
                 Dim castle = realm.GetCastleWithNumber(info.CastleNumber)
-                Dim d As Dispatcher = Dispatcher.FromThread(MainThread)
+                Dim d = Dispatcher.FromThread(MainThread)
 
                 ' Invoke this in main thread!
                 ' (Otherwise the binding to the Breaks collection might throw an exception)
