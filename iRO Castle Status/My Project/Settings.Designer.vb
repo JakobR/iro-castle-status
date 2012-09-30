@@ -137,63 +137,63 @@ Partial Friend NotInheritable Class MySettings
         End Set
     End Property
     
-    <Global.System.Configuration.UserScopedSettingAttribute(), _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
     Public Property VerticalLayout_WindowTop() As Double
         Get
-            Return CType(Me("VerticalLayout_WindowTop"), Double)
+            Return CType(Me("VerticalLayout_WindowTop"),Double)
         End Get
-        Set(value As Double)
+        Set
             Me("VerticalLayout_WindowTop") = value
         End Set
     End Property
-
-    <Global.System.Configuration.UserScopedSettingAttribute(), _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
     Public Property VerticalLayout_WindowLeft() As Double
         Get
-            Return CType(Me("VerticalLayout_WindowLeft"), Double)
+            Return CType(Me("VerticalLayout_WindowLeft"),Double)
         End Get
-        Set(value As Double)
+        Set
             Me("VerticalLayout_WindowLeft") = value
         End Set
     End Property
-
-    <Global.System.Configuration.UserScopedSettingAttribute(), _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
     Public Property HorizontalLayout_WindowTop() As Double
         Get
-            Return CType(Me("HorizontalLayout_WindowTop"), Double)
+            Return CType(Me("HorizontalLayout_WindowTop"),Double)
         End Get
-        Set(value As Double)
+        Set
             Me("HorizontalLayout_WindowTop") = value
         End Set
     End Property
-
-    <Global.System.Configuration.UserScopedSettingAttribute(), _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-     Global.System.Configuration.DefaultSettingValueAttribute("0")> _
+    
+    <Global.System.Configuration.UserScopedSettingAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Configuration.DefaultSettingValueAttribute("0")>  _
     Public Property HorizontalLayout_WindowLeft() As Double
         Get
-            Return CType(Me("HorizontalLayout_WindowLeft"), Double)
+            Return CType(Me("HorizontalLayout_WindowLeft"),Double)
         End Get
-        Set(value As Double)
+        Set
             Me("HorizontalLayout_WindowLeft") = value
         End Set
     End Property
 End Class
 
 Namespace My
-
-    <Global.Microsoft.VisualBasic.HideModuleNameAttribute(), _
-     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(), _
-     Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()> _
+    
+    <Global.Microsoft.VisualBasic.HideModuleNameAttribute(),  _
+     Global.System.Diagnostics.DebuggerNonUserCodeAttribute(),  _
+     Global.System.Runtime.CompilerServices.CompilerGeneratedAttribute()>  _
     Friend Module MySettingsProperty
-
-        <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")> _
+        
+        <Global.System.ComponentModel.Design.HelpKeywordAttribute("My.Settings")>  _
         Friend ReadOnly Property Settings() As Global.iROCastleStatus.MySettings
             Get
                 Return Global.iROCastleStatus.MySettings.Default
