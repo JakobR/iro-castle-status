@@ -78,7 +78,7 @@ Module Main
         Debug.Assert(MainThread.GetApartmentState() = ApartmentState.STA)
         'MessageBox.Show(String.Format("Thread Apartment: {0}", MainThread.GetApartmentState))
 
-        Console.WriteLine("iRO Castle Status")
+        Console.WriteLine("iRO Castle Status {0}", Version)
         Console.WriteLine("using SharpPcap {0}", SharpPcap.Version.VersionString)
         If Args.Length > 0 Then
             Console.WriteLine("Command line arguments: " & String.Join(" ", Args))
@@ -381,6 +381,20 @@ Module Main
 #End If
 #End If
             Return _Logger
+        End Get
+    End Property
+
+    Public ReadOnly Property Version As String
+        Get
+            Try
+                Dim assembly = System.Reflection.Assembly.GetExecutingAssembly()
+                Dim versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location)
+
+                Return String.Format("{0} [{1}]", versionInfo.ProductVersion, versionInfo.FileVersion)
+            Catch ex As Exception
+                Debug.Fail("Error while reading assemby version info!", "This exception was thrown:" & Environment.NewLine & ex.ToString)
+                Return "[version information unavailable]"
+            End Try
         End Get
     End Property
 
