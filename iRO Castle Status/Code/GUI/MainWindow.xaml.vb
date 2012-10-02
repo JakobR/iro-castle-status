@@ -9,6 +9,7 @@ Class MainWindow
         Next
     End Sub
 
+#If DEBUG Then
     Private Sub DebugBreakButton_Click(sender As Object, e As RoutedEventArgs) Handles DebugBreakButton.Click
         Dim packet_start = Chr(&H9A) & Chr(0) & Chr(80) & Chr(0)
         Dim packet_end = Chr(0)
@@ -20,6 +21,7 @@ Class MainWindow
         ProcessBreakMessage(Now, packet_start & "The [Nithafjoll 1] stronghold of Himinn is occupied by the [Revelations] Guild." & packet_end)
         ProcessBreakMessage(Now, packet_start & "f3498sag3" & packet_start & "The [Nithafjoll 2] stronghold of Himinn is occupied by the [Revelations] Guild." & packet_end & "sdkfj83gq93gn" & packet_start & "The [Nithafjoll 3] stronghold of Himinn is occupied by the [Revelations] Guild." & packet_end & "afrpokf09gk4hgrjtssss" & packet_start & "The [Warrior Nation] guild conquered the [Valfreyja 2] stronghold of asdfsg." & packet_end & "s" & packet_start & "The [Luina Guild 3] castle has been conquered by the [Valkyrie] guild." & packet_end & "asdfergv")
     End Sub
+#End If
 
     Private Sub MainWindow_Loaded(sender As Object, e As RoutedEventArgs) Handles MyBase.Loaded
 #If DEBUG Then
