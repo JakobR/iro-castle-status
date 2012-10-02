@@ -2,32 +2,51 @@
 Imports System.IO
 Imports SharpPcap
 Imports iROCastleStatus
+Imports System.Collections.Concurrent
 Imports System.Threading
 Imports System.Windows.Threading
 Imports System.Text.RegularExpressions
 
 Module Main
 
+#Const DEBUG_ENABLE_LOGGING = False
+#Const DEBUG_VERBOSE = False
+
+    Private OptionShowConsole As Boolean = False
+    Private OptionStatistics As Boolean = False
+    Private OptionVerbose As Boolean = False
+    Private OptionNoGUI As Boolean = False
+
     Private MainThread As Thread
 
-    <STAThread>
+    Public ReadOnly Property GUIDispatcher As Dispatcher
+        Get
+            Return Dispatcher.FromThread(MainThread)
+        End Get
+    End Property
+
+    <STAThread()>
     Public Sub Main(Args() As String)
 
         ' Parse command line options
         ' Available options:
         '   --console: Show the console (always active in #DEBUG mode)
+        '   --statistics: Show device statistics (always active in #DEBUG mode)
+        '   --verbose: Show verbose packet information.
         '   --nogui:   Don't show the WPF Window. Implies --console.
 
-        Dim OptionShowConsole As Boolean = False
-        Dim OptionNoGUI As Boolean = False
 
         For Each arg In Args
             If "--console".Equals(arg) Then
                 OptionShowConsole = True
+            ElseIf "--statistics".Equals(arg) Then
+                OptionStatistics = True
+            ElseIf "--verbose".Equals(arg) Then
+                OptionVerbose = True
             ElseIf "--nogui".Equals(arg) Then
                 OptionNoGUI = True
             Else
-                MessageBox.Show("Invalid command line option. Valid options are ""--console"" and ""--nogui"". More information about this is not available.", "iRO Castle Status")
+                MessageBox.Show("Invalid command line switch. Valid switches are ""--console"", ""--statistics"", ""--verbose"", and ""--nogui"". More information about this is not available.", "iRO Castle Status")
                 Exit Sub
             End If
         Next
@@ -38,15 +57,21 @@ Module Main
 
 #If DEBUG Then
         OptionShowConsole = True
+        OptionStatistics = True
+#If DEBUG_VERBOSE Then
+        OptionVerbose = True
+#End If
 #End If
 
         If OptionShowConsole Then
             ConsoleManager.Show()
 
-            Console.WindowWidth = 200
-            Console.WindowHeight = 30
-            Console.BufferWidth = 200
-            Console.BufferHeight = 1000
+            Dim w = Math.Min(200, Console.LargestWindowWidth)
+            Dim h = Math.Min(30, Console.LargestWindowHeight)
+
+            Console.SetWindowPosition(0, 0)
+            Console.SetWindowSize(w, h)
+            Console.SetBufferSize(w, 5000)
         End If
 
         MainThread = Thread.CurrentThread
@@ -86,6 +111,8 @@ Module Main
         ' Start listening to all devices
         Dim CapturedDevices As New List(Of ICaptureDevice)
         For Each device In devices
+            LastStatisticsOutput.Add(device, DateTime.Now)
+
             AddHandler device.OnPacketArrival, New PacketArrivalEventHandler(AddressOf device_OnPacketArrival)
 
             device.Open(DeviceMode.Promiscuous, 1000)
@@ -99,45 +126,116 @@ Module Main
 
         Console.WriteLine()
         If PacketLogger IsNot Nothing Then
-            Console.WriteLine("Packets will be logged to ""{0}"".", PacketLogger.LogDirectoryPath)
+            Console.WriteLine("Packet info and content will be logged to ""{0}"".", PacketLogger.LogDirectoryPath)
+        Else
+            Console.WriteLine("Packet info and content will not be logged.")
         End If
 
+        Console.WriteLine()
+        If OptionVerbose Then
+            Console.WriteLine("Packet info will be shown verbosely in the console window.")
+        Else
+            Console.WriteLine("Packet info in the console window:")
+            Console.WriteLine("  'f' -- Packet from Gravity's servers (these will be interpreted for WoE break messages)")
+            Console.WriteLine("  't' -- Packet from this computer to Gravity's servers")
+            Console.WriteLine("  'o' -- Other packets, uninteresting for this application (Teamspeak, etc.)")
+        End If
+
+        ' Start background thread to process packets
+        Task.Factory.StartNew(AddressOf ProcessPackets)
+
+        Console.WriteLine()
         If OptionNoGUI Then
             Debug.Assert(OptionShowConsole)
             Debug.Assert(ConsoleManager.HasConsole)
 
-            Console.WriteLine("Ready. Press [Escape] to exit...")
-            Console.WriteLine()
+            Console.WriteLine("Ready. Press [Escape] to exit...{0}", Environment.NewLine)
 
             Do Until (Console.ReadKey.Key = ConsoleKey.Escape)
             Loop
         Else
-            Console.WriteLine("Ready.")
-            Console.WriteLine()
+            Console.WriteLine("Ready.{0}", Environment.NewLine)
 
             Dim w = New MainWindow
             w.ShowDialog()
         End If
 
-        Console.WriteLine()
-        Console.WriteLine("Closing devices...")
+        Console.WriteLine("{0}Closing devices...", Environment.NewLine)
 
         For Each device In CapturedDevices
-            Console.WriteLine("-- Closing {0}.", device.Description)
+            Console.WriteLine("{2}-- Closing {0}.{2}   * Statistics: {1}", device.Description, device.Statistics, Environment.NewLine)
             device.StopCapture()
             device.Close()
         Next
 
+        ' Complete packet queue
+        ' This *must* be done after stopping all capturing (adding to the collection when completed will throw an exception)
+        ' If we don't complete it, the loop in ProcessPackets won't stop -- which actually doesn't matter much in this case, since the application terminates when Sub Main is done.
+        PacketQueue.CompleteAdding()
+
+#If DEBUG Then
+        System.Threading.Thread.Sleep(250)
+
+        ' Flush input buffer
+        Do While Console.KeyAvailable
+            Console.ReadKey()
+        Loop
+
+        Console.WriteLine("{0}Press any key to exit...", Environment.NewLine)
+        Console.ReadKey()
+#End If
+
     End Sub
 
-    ' Careful: This will be called from a background thread.
+
+    Private LastStatisticsOutput As New Dictionary(Of ICaptureDevice, DateTime)
+    Private StatisticsOutputInterval As New TimeSpan(0, 0, 30)
+
+    Private PacketQueue As New BlockingCollection(Of RawCapture)
+
+    ' Careful: This will be called from a (various?) background thread(s).
     Private Sub device_OnPacketArrival(sender As Object, e As CaptureEventArgs)
-        Dim device = DirectCast(sender, ICaptureDevice)
 
-        Dim time = e.Packet.Timeval.Date
-        Dim length = e.Packet.Data.Length
+        Debug.Assert(PacketQueue IsNot Nothing)
 
-        Dim packet = PacketDotNet.Packet.ParsePacket(e.Packet.LinkLayerType, e.Packet.Data)
+        If OptionStatistics Then
+            Debug.Assert(LastStatisticsOutput.ContainsKey(e.Device))
+
+            Dim now = DateTime.Now
+            Dim interval = now - LastStatisticsOutput(e.Device)
+            If interval >= StatisticsOutputInterval Then
+                Console.WriteLine("{0}Statistics for {1}:{0}  {2}", Environment.NewLine, e.Device.Name, e.Device.Statistics)
+                LastStatisticsOutput(e.Device) = now
+            End If
+        End If
+
+        If Not PacketQueue.TryAdd(e.Packet) Then
+
+            ' The packet is dropped
+            Console.WriteLine("{0}WARNING: Packet dropped due to full queue!", Environment.NewLine)
+            Debug.Fail("Packet dropped due to full queue!")
+
+        End If
+
+    End Sub
+
+    ' Call this in its own background thread.
+    Private Sub ProcessPackets()
+
+        For Each RawPacket In PacketQueue.GetConsumingEnumerable()
+
+            ProcessPacket(RawPacket)
+
+        Next
+
+    End Sub
+
+    Private Sub ProcessPacket(RawPacket As RawCapture)
+
+        Dim time = RawPacket.Timeval.Date
+        Dim length = RawPacket.Data.Length
+
+        Dim packet = PacketDotNet.Packet.ParsePacket(RawPacket.LinkLayerType, RawPacket.Data)
         Dim tcpPacket = PacketDotNet.TcpPacket.GetEncapsulated(packet)
 
         If tcpPacket IsNot Nothing Then
@@ -150,10 +248,20 @@ Module Main
             Dim dstIp = ipPacket.DestinationAddress
             Dim dstPort = tcpPacket.DestinationPort
 
-            Console.WriteLine("{0:00}:{1:00}:{2:00},{3:000} Len={4} {5}:{6} -> {7}:{8}  payloaddata={9} bytes   payloadpacket={10}",
-                    time.Hour, time.Minute, time.Second, time.Millisecond, length,
-                    srcIp, srcPort, dstIp, dstPort,
-                    If(tcpPacket.PayloadData Is Nothing, "none", tcpPacket.PayloadData.Length.ToString), tcpPacket.PayloadPacket)
+            If OptionVerbose Then
+                Console.WriteLine("{0:00}:{1:00}:{2:00},{3:000} Len={4} {5}:{6} -> {7}:{8}  payloaddata={9} bytes   payloadpacket={10}",
+                        time.Hour, time.Minute, time.Second, time.Millisecond, length,
+                        srcIp, srcPort, dstIp, dstPort,
+                        If(tcpPacket.PayloadData Is Nothing, "none", tcpPacket.PayloadData.Length.ToString), tcpPacket.PayloadPacket)
+            Else
+                If srcIp.BelongsToGravity Then
+                    Console.Write("f"c)
+                ElseIf dstIp.BelongsToGravity Then
+                    Console.Write("t"c)
+                Else
+                    Console.Write("o"c)
+                End If
+            End If
 
             If PacketLogger IsNot Nothing Then
                 Dim category As String
@@ -178,6 +286,7 @@ Module Main
                     Dim text = System.Text.Encoding.ASCII.GetString(payload, 0, payload.Length)
                     ProcessBreakMessage(time, text)
                 End If
+
             End If 'srcIp.BelongsToGravity
 
         End If
@@ -230,11 +339,10 @@ Module Main
             If realm IsNot Nothing AndAlso info.CastleNumber >= 1 AndAlso info.CastleNumber <= realm.Castles.Count Then
 
                 Dim castle = realm.GetCastleWithNumber(info.CastleNumber)
-                Dim d = Dispatcher.FromThread(MainThread)
 
                 ' Invoke this in main thread!
                 ' (Otherwise the binding to the Breaks collection might throw an exception)
-                d.BeginInvoke(New Action(Of DateTime, String)(AddressOf castle.AddBreak), Time, info.GuildName)
+                GUIDispatcher.BeginInvoke(New Action(Of DateTime, String)(AddressOf castle.AddBreak), Time, info.GuildName)
 
             End If
 
@@ -243,39 +351,36 @@ Module Main
     End Sub
 
     Private Sub iRO_BreakOccurred(sender As Object, e As Castle.BreakEventArgs)
-        Console.WriteLine()
-        Console.WriteLine()
-        Console.WriteLine()
-        Console.WriteLine()
-        Console.WriteLine()
-        Console.WriteLine("Castle status as of {0:00}:{1:00}:", e.Time.Hour, e.Time.Minute)
-        Console.WriteLine()
+        Dim output = New System.Text.StringBuilder()
+        output.AppendFormat("{2}{2}{2}{2}{2}Castle status as of {0:00}:{1:00}:{2}", e.Time.Hour, e.Time.Minute, Environment.NewLine)
 
         For Each r In WoE.iRO.Realms
             If r.HasAtLeastOneBreak Then
                 For Each c In r.Castles
-                    Console.WriteLine("{1,10} {2} -- {0}", c.OwningGuild, r.Name, c.Number)
+                    output.AppendFormat("{1,10} {2} -- {0}{3}", c.OwningGuild, r.Name, c.Number, Environment.NewLine)
                 Next
-                Console.WriteLine()
+                output.AppendLine()
             End If
         Next
+
+        Console.WriteLine(output.ToString)
     End Sub
 
 
     Private ReadOnly Property PacketLogger As Logger
         Get
-#If DEBUG Then
             Static _Logger As Logger
+#If DEBUG Then
+#If DEBUG_ENABLE_LOGGING Then
             If _Logger Is Nothing Then
                 Dim now = DateTime.Now
                 Dim LogDirectoryName = String.Format("Log-{0:0000}-{1:00}-{2:00}--{3:00}-{4:00}-{5:00}", now.Year, now.Month, now.Day, now.Hour, now.Minute, now.Second)
                 Dim LogDirectoryPath = Path.Combine("D:\iRO Castle Status", LogDirectoryName)
                 _Logger = New Logger(LogDirectoryPath, True)
             End If
-            Return _Logger
-#Else
-            Return Nothing
 #End If
+#End If
+            Return _Logger
         End Get
     End Property
 
