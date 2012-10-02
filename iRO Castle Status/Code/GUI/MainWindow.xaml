@@ -169,6 +169,7 @@
                 </TreeView.Resources>
             </TreeView>
 
+            <!-- The horizontal view needs a dynamically showing scroll bar (if the guild names are getting too long) -->
             <ItemsControl Grid.Column="0" ItemTemplate="{StaticResource RealmHorizontalTemplate}" ItemsSource="{Binding Realms,Source={StaticResource iRO}}">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
