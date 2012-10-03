@@ -361,7 +361,6 @@ Module Main
         Console.WriteLine(output.ToString)
     End Sub
 
-
     Private ReadOnly Property PacketLogger As Logger
         Get
             Static _Logger As Logger

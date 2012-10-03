@@ -46,14 +46,18 @@ Public Class WoE
         RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs("AllCastleBreaks"))
     End Sub
 
+    Private Shared _iRO As WoE
+    Private Shared ReadOnly _iRO_Lock As New Object()
 
     Public Shared ReadOnly Property iRO As WoE
         Get
-            Static _iRO As WoE
-
-            If _iRO Is Nothing Then
-                _iRO = WoE.Create(iRO_CreateRealms)
-            End If
+            ' Lock to ensure thread-safety
+            ' Other methods for thread-safe creation: http://csharpindepth.com/Articles/General/Singleton.aspx
+            SyncLock _iRO_Lock
+                If _iRO Is Nothing Then
+                    _iRO = WoE.Create(iRO_CreateRealms)
+                End If
+            End SyncLock
 
             Return _iRO
         End Get
