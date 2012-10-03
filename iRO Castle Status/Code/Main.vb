@@ -209,13 +209,7 @@ Module Main
             End If
         End If
 
-        If Not PacketQueue.TryAdd(e.Packet) Then
-
-            ' The packet is dropped
-            Console.WriteLine("{0}WARNING: Packet dropped due to full queue!", Environment.NewLine)
-            Debug.Fail("Packet dropped due to full queue!")
-
-        End If
+        PacketQueue.Add(e.Packet)
 
     End Sub
 
