@@ -81,6 +81,9 @@ Public Class Castle
         Me.IsEnabled = IsEnabled
     End Sub
 
+    ' Only call this method from the UI thread!
+    ' (MainWindow is binding to the Breaks and OwningGuild properties).
+    ' (Actually, all updates to the WoE, Realm, and Castle classes should be done in the UI thread.)
     Public Sub AddBreak(Time As DateTime, BreakingGuild As String)
 
         ' Only add the break if there wasn't already another one less than five seconds ago
