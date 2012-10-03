@@ -384,7 +384,7 @@ Module Main
                 Dim assembly = System.Reflection.Assembly.GetExecutingAssembly()
                 Dim versionInfo = System.Diagnostics.FileVersionInfo.GetVersionInfo(assembly.Location)
 
-                Return String.Format("{0} [{1}]", versionInfo.ProductVersion, versionInfo.FileVersion)
+                Return String.Format("{0}", versionInfo.ProductVersion)
             Catch ex As Exception
                 Debug.Fail("Error while reading assemby version info!", "This exception was thrown:" & Environment.NewLine & ex.ToString)
                 Return "[version information unavailable]"
