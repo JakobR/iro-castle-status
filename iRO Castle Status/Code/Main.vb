@@ -258,16 +258,17 @@ Module Main
             End If
 
             If PacketLogger IsNot Nothing Then
-                Dim category As String
+                Dim category As String = Nothing
+
                 If srcIp.BelongsToGravity Then
                     category = "From Gravity"
                 ElseIf dstIp.BelongsToGravity Then
                     category = "To Gravity"
-                Else
-                    category = "Other"
                 End If
 
-                PacketLogger.LogTcpPacket(tcpPacket, ipPacket, time, length, category)
+                If category IsNot Nothing Then
+                    PacketLogger.LogTcpPacket(tcpPacket, ipPacket, time, length, category)
+                End If
             End If
 
 
