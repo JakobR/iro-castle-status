@@ -95,6 +95,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Code\GUI\Helpers\BooleanVisibilityConverter.vb" />
+    <Compile Include="Code\Helpers\CommandLineOptions.vb" />
     <Compile Include="Code\Helpers\ConsoleManager.vb" />
     <Compile Include="Code\Helpers\Logger.vb" />
     <Compile Include="Code\Main.vb" />

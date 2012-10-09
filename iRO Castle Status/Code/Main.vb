@@ -7,15 +7,16 @@ Imports System.Threading
 Imports System.Windows.Threading
 Imports System.Text.RegularExpressions
 
+#Const DEBUG_ENABLE_LOGGING = False
+
 Module Main
 
-#Const DEBUG_ENABLE_LOGGING = False
-#Const DEBUG_VERBOSE = False
-
-    Private OptionShowConsole As Boolean = False
-    Private OptionStatistics As Boolean = False
-    Private OptionVerbose As Boolean = False
-    Private OptionNoGUI As Boolean = False
+    Private _Options As CommandLineOptions
+    Public ReadOnly Property Options As CommandLineOptions
+        Get
+            Return _Options
+        End Get
+    End Property
 
     Private MainThread As Thread
 
@@ -29,41 +30,14 @@ Module Main
     Public Sub Main(Args() As String)
 
         ' Parse command line options
-        ' Available options:
-        '   --console: Show the console (always active in #DEBUG mode)
-        '   --statistics: Show device statistics (always active in #DEBUG mode)
-        '   --verbose: Show verbose packet information.
-        '   --nogui:   Don't show the WPF Window. Implies --console.
+        _Options = CommandLineOptions.Parse(Args)
 
-
-        For Each arg In Args
-            If "--console".Equals(arg) Then
-                OptionShowConsole = True
-            ElseIf "--statistics".Equals(arg) Then
-                OptionStatistics = True
-            ElseIf "--verbose".Equals(arg) Then
-                OptionVerbose = True
-            ElseIf "--nogui".Equals(arg) Then
-                OptionNoGUI = True
-            Else
-                MessageBox.Show("Invalid command line switch. Valid switches are ""--console"", ""--statistics"", ""--verbose"", and ""--nogui"". More information about this is not available.", "iRO Castle Status")
-                Exit Sub
-            End If
-        Next
-
-        If OptionNoGUI Then
-            OptionShowConsole = True
+        ' Invalid switch?
+        If Options Is Nothing Then
+            Exit Sub
         End If
 
-#If DEBUG Then
-        OptionShowConsole = True
-        OptionStatistics = True
-#If DEBUG_VERBOSE Then
-        OptionVerbose = True
-#End If
-#End If
-
-        If OptionShowConsole Then
+        If Options.ShowConsole Then
             ConsoleManager.Show()
 
             Dim w = Math.Min(200, Console.LargestWindowWidth)
@@ -71,7 +45,7 @@ Module Main
 
             Console.SetWindowPosition(0, 0)
             Console.SetWindowSize(w, h)
-            Console.SetBufferSize(w, 5000)
+            Console.SetBufferSize(w, 2000)
         End If
 
         MainThread = Thread.CurrentThread
@@ -132,7 +106,7 @@ Module Main
         End If
 
         Console.WriteLine()
-        If OptionVerbose Then
+        If Options.Verbose Then
             Console.WriteLine("Packet info will be shown verbosely in the console window.")
         Else
             Console.WriteLine("Packet info in the console window:")
@@ -145,8 +119,8 @@ Module Main
         Task.Factory.StartNew(AddressOf ProcessPackets)
 
         Console.WriteLine()
-        If OptionNoGUI Then
-            Debug.Assert(OptionShowConsole)
+        If Options.NoGUI Then
+            Debug.Assert(Options.ShowConsole)
             Debug.Assert(ConsoleManager.HasConsole)
 
             Console.WriteLine("Ready. Press [Escape] to exit...{0}", Environment.NewLine)
@@ -193,12 +167,12 @@ Module Main
 
     Private PacketQueue As New BlockingCollection(Of RawCapture)
 
-    ' Careful: This will be called from a (various?) background thread(s).
+    ' Careful: This will be called from a (or various?) background thread(s).
     Private Sub device_OnPacketArrival(sender As Object, e As CaptureEventArgs)
 
         Debug.Assert(PacketQueue IsNot Nothing)
 
-        If OptionStatistics Then
+        If Options.Statistics Then
             Debug.Assert(LastStatisticsOutput.ContainsKey(e.Device))
 
             Dim now = DateTime.Now
@@ -242,7 +216,7 @@ Module Main
             Dim dstIp = ipPacket.DestinationAddress
             Dim dstPort = tcpPacket.DestinationPort
 
-            If OptionVerbose Then
+            If Options.Verbose Then
                 Console.WriteLine("{0:00}:{1:00}:{2:00},{3:000} Len={4} {5}:{6} -> {7}:{8}  payloaddata={9} bytes   payloadpacket={10}",
                         time.Hour, time.Minute, time.Second, time.Millisecond, length,
                         srcIp, srcPort, dstIp, dstPort,
@@ -273,7 +247,7 @@ Module Main
 
 
             'Only process packets from the iRO servers
-            If srcIp.BelongsToGravity Then
+            If Options.NoIPCheck OrElse srcIp.BelongsToGravity Then
                 Dim payload = tcpPacket.PayloadData
 
                 If payload IsNot Nothing Then
